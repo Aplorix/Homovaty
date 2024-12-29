@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Lodges</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            flex-wrap: nowrap;
+        }
+        .logo img {
+            height: 70px;
+            margin-right: 5px;
+        }
+        .hot-deals {
+            background-color: #FF5733;
+            color: white;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            width: 90%;
+            text-align: center;
+        }
+        .hot-deals h2 {
+            margin: 0;
+        }
+        .lodge-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .lodge {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .lodge img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .lodge-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .lodge-info h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .lodge-info p {
+            margin: 0;
+            color: #555;
+        }
+
+        .lodge-info s {
+            margin: 0;
+            color: #555;
+            font-size: small;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="Pictures-video of lodges/Untitled_design-removebg-preview.png" alt="Aplorix Logo">
+        </div>
+    </header>
+
+
+    <div class="hot-deals">
+        <h2>🔥 Hot Deals 🔥</h2>
+        <p>These are the best lodges at unbeatable prices, offering luxury and convenience for students!</p>
+    </div>
+
+    <div class="lodge-container">
+        <!-- Example Lodge 1 -->
+        <div class="lodge">
+                <a href="GnM.html" style="text-decoration: none;">
+            <img src="Pictures-video of lodges/Goodness and Mercy Lodge.jpg" alt="Goodness and Mercy Lodge">
+            <div class="lodge-info">
+                <h3>Goodness and Mercy Lodge</h3>
+                <p>Price: <s style="color: red;">₦330K/year</s><br><span style="color: green;">₦305K &#9989;</span></br></p>
+            </div>
+                </a>
+        </div>
+
+         <!-- Example Lodge 2 -->
+        <div class="lodge">
+            <a href="Love.html" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/love.jpg" alt="Love Crib Lodge">
+            <div class="lodge-info">
+                <h3>Love Crib Lodge</h3>
+            <p>Price: <s style="color: red;">₦370K/year</s><br><span style="color: green;">₦290k + ₦50k (Cushion Fee - Refundable) = ₦340k&#9989;</span></br></p>
+            </div>
+            </a>
+        </div>
+
+         <!-- Example Lodge 3 -->
+         <div class="lodge">
+            <a href="#" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/Salvation Lodge.jpg" alt="Salvation Lodge">
+            <div class="lodge-info">
+                <h3>Salvation Lodge <span style="color: red; font-size: small;">No vacancy available</span></h3>
+            <p>Price: <s style="color: red;">₦350K/year</s><br><span style="color: green;">₦320k + ₦10k (Security fee) = ₦330k&#9989;</span></br></p>
+            </div>
+            </a>
+        </div>
+
+         <!-- Example Lodge 4 -->
+         <div class="lodge">
+            <a href="#" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/Amazing Grace Lodge.jpg" alt="Amazing Grace Lodge">
+            <div class="lodge-info">
+                <h3>Amazing Grace Lodge</h3>
+            <p style="color: red;"><strong>Price:</strong> Unavailable-Under Construction</p>
+            </div>
+            </a>
+        </div>
+
+         <!-- Example Lodge 5 -->
+         <div class="lodge">
+            <a href="BN lodge.html" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/BN lodge.jpg" alt="BN Lodge">
+            <div class="lodge-info">
+                <h3>BN Lodge</h3>
+            <p>Price: <s style="color: red;">₦300K/year</s><br><span style="color: green;">₦265k&#9989;</span></br></p>
+            </div>
+            </a>
+        </div>
+
+         <!-- Example Lodge 6 -->
+         <div class="lodge">
+            <a href="grace.html" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/Grace Lodge.jpg" alt="Grace Lodge">
+            <div class="lodge-info">
+                <h3>Grace Lodge</h3>
+            <p>Price: <s style="color: red;">₦370K/year (Upstairs) and ₦350K/year (Downstairs) </s><br><span style="color: green;">₦350K/year (Upstairs) and ₦330K/year (Downstairs)&#9989;</span></br></p>
+            </div>
+            </a>
+        </div>
+                <!-- Example Lodge 7 -->
+        <div class="lodge">
+                <a href="BNA.html" style="text-decoration: none;">
+            <img src="Pictures-video of lodges/BNA Lodge (Three SIsters).jpg" alt="Lodge 8">
+                <div class="lodge-info">
+            <h3>BNA Lodge (Three SIsters)</h3>
+            <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦305k &#9989;</span></br></p>    
+                </div>
+                </a>
+        </div>
+
+                 <!-- Example Lodge 8 -->
+                 <div class="lodge">
+                    <a href="muna.html" style="text-decoration: none;">
+                <img src="Pictures-video of lodges/MUNA LODGE.png" alt="Muna Lodge">
+                    <div class="lodge-info">
+                        <h3>Muna Lodge</h3>
+                        <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦295k &#9989;</span></br></p>
+                    </div>
+                    </a>
+                </div>
+
+                <!-- Example Lodge 9 -->
+                <div class="lodge">
+                    <a href="#" style="text-decoration: none;">
+                <img src="Pictures-video of lodges/ECOWAS.jpg" alt="EcoWas Lodge">
+                    <div class="lodge-info">
+                        <h3>EcoWas Lodge</h3>
+                    <p>Price: <s style="color: red;">₦300k/year</s><br><span style="color: green;">₦275k &#9989;</span></br></p>
+                    </div>
+                    </a>
+                </div> 
+                                 <!-- Example Lodge 10 -->
+                                 <div class="lodge">
+                                    <a href="#" style="text-decoration: none;">
+                                <img src="Pictures-video of lodges/Rose Lodge.jpg" alt="Rose Lodge">
+                                    <div class="lodge-info">
+                                        <h3>Rose Lodge <span style="color: red; font-size: small;">No vacancy available</span></h3>
+                                    <p>Price: <s style="color: red;">₦310k/year</s><br><span style="color: green;">₦270k &#9989;</span></br></p>
+                                    </div>
+                                    </a>
+                                </div>                
+    </div>    
+</body>
+</html>
