@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Lodges</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            flex-wrap: nowrap;
+        }
+        .logo img {
+            height: 70px;
+            margin-right: 5px;
+        }
+        .hot-deals {
+            background-color: #FF5733;
+            color: white;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            width: 90%;
+            text-align: center;
+        }
+        .lodge-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .lodge {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .lodge img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .lodge-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .lodge-info h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .roommate-section {
+            width: 90%;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .roommate-section h2 {
+            text-align: center;
+            color: #007BFF;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #FF5733;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="Pictures-video of lodges/Untitled_design-removebg-preview.png" alt="Aplorix Logo">
+        </div>
+    </header>
+
+    <div class="hot-deals">
+        <h2>🔥 Homovate 🔥</h2>
+        <p>These are the best lodges at unbeatable prices, offering luxury and convenience for students!</p>
+    </div>
+
+    <!-- Lodge list remain same -->
+    <div class="lodge-container">
+        <!-- Lodge cards go here (no change) -->
+    </div>
+
+    <!-- Roommate Interest Section -->
+    <div class="roommate-section">
+        <h2>👥 Show Interest for Roommate</h2>
+        <form>
+            <input type="text" placeholder="Your Full Name" required>
+            <input type="text" placeholder="Lodge Name / Apartment" required>
+            <input type="number" placeholder="Your WhatsApp number" required>
+            <textarea placeholder="Short Description about yourself (e.g clean, quiet, year of study...)" rows="4" required></textarea>
+            <button type="submit">Submit Interest</button>
+        </form>
+    </div>
+
+    
+  <script>
+    document.getElementById('roommateForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const lodge = document.getElementById('lodge').value;
+      const desc = document.getElementById('desc').value;
+
+      const message = `Hello! I want to indicate interest in a roommate.
+Name: ${name}
+Lodge: ${lodge}
+About Me: ${desc}`;
+
+      const encodedMessage = encodeURIComponent(message);
+      const phoneNumber = '2348147116208'; // Replace with your actual number in international format
+
+      // Open WhatsApp
+      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+
+      // Redirect after few seconds
+      setTimeout(() => {
+        window.location.href = 'thankyou.html'; // replace with your actual thank-you page
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
