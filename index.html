@@ -32,10 +32,27 @@
             border-radius: 5px;
             width: 90%;
             text-align: center;
+            font-size: 15px;
         }
         .hot-deals h2 {
             margin: 0;
         }
+        .hot-deals-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+        }
+
+.btn {
+    background-color: white;
+    color: #FF5733;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+
         .lodge-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -71,7 +88,7 @@
 
         .lodge-info s {
             margin: 0;
-            color: #555;
+            color: #555; 
             font-size: small;
         }
     </style>
@@ -87,6 +104,10 @@
     <div class="hot-deals">
         <h2>🔥 Hot Deals 🔥</h2>
         <p>These are the best lodges at unbeatable prices, offering luxury and convenience for students!</p>
+        <div class="hot-deals-buttons">
+            <a href="roommate.html" class="btn left-btn">Need a Roommate?</a>
+            <a href="right-page.html" class="btn right-btn">Going for IT?</a>
+        </div>    
     </div>
 
     <div class="lodge-container">
