@@ -114,45 +114,42 @@
     <div class="roommate-section">
         <h2>👥 Show Interest for Roommate</h2>
         <form id="roommateForm">
-            <input type="text" placeholder="Your Full Name" required>
-            <input type="text" placeholder="Lodge Name / Apartment" required>
-            <input type="number" placeholder="Your WhatsApp number" required>
-            <textarea placeholder="Short Description about yourself (e.g clean, quiet, year of study...)" rows="4" required></textarea>
+            <input type="text" placeholder="Your Full Name" required id="name">
+            <input type="text" placeholder="Lodge Name / Apartment" required id="lodge">
+            <input type="number" placeholder="Your WhatsApp number" required id="number">
+            <textarea placeholder="Short Description about yourself (e.g clean, quiet, year of study...)" rows="4" required id="desc"></textarea>
             <button type="submit">Submit Interest</button>
         </form>
     </div>
 
-    
-  <script>
-    document.getElementById('roommateForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const name = document.getElementById('name').value;
-      const lodge = document.getElementById('lodge').value;
-      const desc = document.getElementById('desc').value;
-
-      const message = `Hello! I want to indicate interest in a roommate.
-Name: ${name}
-Lodge: ${lodge}
-About Me: ${desc}`;
-
-      // Open WhatsApp
-      const encodedMessage = encodeURIComponent(message);
-    const phone = '2348147116208'; // Replace with your number (with country code, no leading zero)
-
-    // Use whatsapp:// instead of https://
-    const link = `whatsapp://send?phone=${phone}&text=${encodedMessage}`;
-
-    // Try to open WhatsApp app
-    window.location.href = link;
-
-      // Redirect after few seconds
-      setTimeout(() => {
-        window.location.href = 'thankyou.html'; // replace with your actual thank-you page
-      }, 2000);
-    });
-  </script>
-    
+    <script>
+        document.getElementById("roommateForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form refresh
+        
+            const name = document.getElementById("name").value;
+            const lodge = document.getElementById("lodge").value;
+            const number = document.getElementById("number").value;
+            const desc = document.getElementById("desc").value;
+        
+            const message = `Hello! I want to indicate interest in a roommate.
+        Name: ${name}
+        Lodge: ${lodge}
+        About Me: ${desc}`;
+        
+            const phone = "08147116208"; // Replace with your WhatsApp number
+            const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        
+            // Open WhatsApp chat in new tab
+            window.open(whatsappURL, "_blank");
+        
+            // Then redirect to Thank You page after 2 seconds
+            setTimeout(() => {
+                window.location.href = "thank-you.html";
+            }, 2000);
+        });
+        </script>
+        
 
 </body>
 </html>
+ 
