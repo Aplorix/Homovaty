@@ -136,11 +136,15 @@ Name: ${name}
 Lodge: ${lodge}
 About Me: ${desc}`;
 
-      const encodedMessage = encodeURIComponent(message);
-      const phoneNumber = '2348147116208'; // Replace with your actual number in international format
-
       // Open WhatsApp
-      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+      const encodedMessage = encodeURIComponent(message);
+    const phone = '2348147116208'; // Replace with your number (with country code, no leading zero)
+
+    // Use whatsapp:// instead of https://
+    const link = `whatsapp://send?phone=${phone}&text=${encodedMessage}`;
+
+    // Try to open WhatsApp app
+    window.location.href = link;
 
       // Redirect after few seconds
       setTimeout(() => {
@@ -148,5 +152,7 @@ About Me: ${desc}`;
       }, 2000);
     });
   </script>
+    
+
 </body>
 </html>
