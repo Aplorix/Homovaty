@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Lodges</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #007BFF;
+            color: white;
+            padding: 5px 10px;
+            height: 60px;
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+        .logo {
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 115px;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .hot-deals {
+            background-color: #FF5733;
+            color: white;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            width: 90%;
+            text-align: center;
+        }
+        .lodge-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .lodge {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .lodge img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .lodge-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .lodge-info h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .roommate-section {
+            width: 90%;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .roommate-section h2 {
+            text-align: center;
+            color: #007BFF;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #FF5733;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="Pictures-video of lodges/Homovate logo.png" alt="Homovate logo">
+        </div>
+    </header>
+
+    <div class="hot-deals">
+        <h2>🔥 Homovate 🔥</h2>
+        <p>These are the best lodges at unbeatable prices, offering luxury and convenience for students!</p>
+    </div>
+
+    <!-- Lodge list remain same -->
+    <div class="lodge-container">
+        <!-- Lodge cards go here (no change) -->
+    </div>
+
+    <!-- Roommate Interest Section -->
+    <div class="roommate-section">
+        <h2> Indication to rent out my room for 2nd semester!</h2>
+        <form id="roommateForm">
+            <input type="text" placeholder="Your Full Name" required id="name">
+            <input type="text" placeholder="Lodge Name / Apartment" required id="lodge">
+            <input type="number" placeholder="Your WhatsApp number" required id="number">
+            <textarea placeholder="Short Description about the lodge" rows="4" required id="desc"></textarea>
+            <button type="submit">Submit Interest</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("roommateForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form refresh
+        
+            const name = document.getElementById("name").value;
+            const lodge = document.getElementById("lodge").value;
+            const number = document.getElementById("number").value;
+            const desc = document.getElementById("desc").value;
+        
+            const message = `Hello! I want to indicate interest in renting my room for just second semester.
+        Name: ${name}
+        Lodge: ${lodge}
+        About Me: ${desc}`;
+        
+            const phone = "08147116208"; // Replace with your WhatsApp number
+            const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        
+            // Open WhatsApp chat in new tab
+            window.open(whatsappURL, "_blank");
+        
+            // Then redirect to Thank You page after 2 seconds
+            setTimeout(() => {
+                window.location.href = "thank you so much.html";
+            }, 2000);
+        });
+        </script>
+        
+
+</body>
+</html>
