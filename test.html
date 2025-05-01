@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Lodges</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #007BFF;
+            color: white;
+            padding: 5px 10px;
+            height: 60px;
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+        .logo {
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 115px;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .hot-deals {
+            background-color: #FF5733;
+            color: white;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            width: 90%;
+            text-align: center;
+            font-size: 15px;
+        }
+        .hot-deals h2 {
+            margin: 0;
+        }
+        .hot-deals-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+.btn {
+    background-color: white;
+    color: #FF5733;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 3px;
+    font-weight: bold;
+    margin: 5px 0; /* Add some vertical margin for mobile view */
+}
+
+
+        .lodge-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .lodge {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-decoration: none; /* Remove default link styling */
+            color: inherit; /* Inherit text color */
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .lodge:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add a subtle hover effect */
+        }
+        .lodge img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .lodge-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .lodge-info h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .lodge-info p {
+            margin: 0;
+            color: #555;
+        }
+
+        .lodge-info s {
+            margin: 0;
+            color: #555;
+            font-size: small;
+        }
+
+        /* Media query for mobile devices (max-width: 600px) */
+        @media (max-width: 600px) {
+            .hot-deals-buttons {
+                flex-direction: column; /* Stack buttons vertically */
+                align-items: center; /* Center the buttons horizontally */
+            }
+
+            .btn {
+                width: 80%; /* Make buttons wider on mobile */
+                margin: 10px 0; /* Increase vertical margin for better spacing */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="Pictures-video of lodges/Homovate logo.png" alt="Homovate logo">
+        </div>
+    </header>
+
+
+    <div class="hot-deals">
+        <h2>🔥 Roommate Connection 🔥</h2>
+        <p>This is an opportunity to connect with desired Roommate!</p>
+        <div class="hot-deals-buttons">
+            <a href="roommate.html" class="btn left-btn">Need a Roommate?</a>
+        </div>
+    </div>
+
+
+    <div class="lodge-container">
+        <a href="https://wa.me/08147116208?text=Hello! I am interested in being your roommate. I saw your profile on Homovate." class="lodge" target="_blank">
+            <img src="Pictures-video of lodges/Ugwu Pascal Tochukwu.png" alt="Roommate 1">
+            <div class="lodge-info">
+                <h3>Ugwu Pascal Tochukwu</h3>
+                <p>Dept: Criminology And Security Studies</p>
+                <p>Level: 100</p>
+                <p>Gender: Male</p>
+                <p>Price: N150,000</p>
+            </div>
+        </a>
+
+        <a href="https://wa.me/08012345678?text=Hi! I'd like to inquire about the roommate opportunity you posted on Homovate." class="lodge" target="_blank">
+            <img src="Pictures-video of lodges/Orogwu Ugochi Nancy.png" alt="Roommate 2">
+            <div class="lodge-info">
+                <h3>Orogwu Ugochi Nancy</h3>
+                <p>Dept: Example Department</p>
+                <p>Level: 200</p>
+                <p>Gender: Female</p>
+                <p>Price: N60,000</p>
+            </div>
+        </a>
+    </div>
+</body>
+</html>
