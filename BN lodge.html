@@ -14,20 +14,30 @@
             background-color: #f9f9f9;
         }
 
-       header {
+        header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background-color: #007BFF;
             color: white;
-            padding: 2px 5px;
-            height: 40px;
+            padding: 5px 10px;
+            height: 60px;
             flex-wrap: nowrap;
+            overflow: hidden;
+        }
+        .logo {
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
         }
         .logo img {
             height: 115px;
-            margin-right: 5px;
+            max-height: 100%;
+            object-fit: contain;
         }
+        
         .hot-deals {
             background-color: #FF5733;
             color: white;
