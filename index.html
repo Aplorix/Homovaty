@@ -48,9 +48,9 @@
             margin: 0;
         }
         .hot-deals-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
         }
 
 .btn {
@@ -60,6 +60,7 @@
     text-decoration: none;
     border-radius: 3px;
     font-weight: bold;
+    margin: 5px 0; /* Add some vertical margin for mobile view */
 }
 
 
@@ -98,8 +99,21 @@
 
         .lodge-info s {
             margin: 0;
-            color: #555; 
+            color: #555;
             font-size: small;
+        }
+
+        /* Media query for mobile devices (max-width: 600px) */
+        @media (max-width: 600px) {
+            .hot-deals-buttons {
+                flex-direction: column; /* Stack buttons vertically */
+                align-items: center; /* Center the buttons horizontally */
+            }
+
+            .btn {
+                width: 80%; /* Make buttons wider on mobile */
+                margin: 10px 0; /* Increase vertical margin for better spacing */
+            }
         }
     </style>
 </head>
@@ -116,9 +130,11 @@
         <p>These are the best lodges at unbeatable prices, offering luxury and convenience for students!</p>
         <div class="hot-deals-buttons">
             <a href="roommate.html" class="btn left-btn">Need a Roommate?</a>
-            <a href="right-page.html" class="btn right-btn">Going for IT?</a>
-        </div>    
+            <a href="IT.html" class="btn right-btn">Going for IT?</a>
+            <a href="Sell.html" class="btn">Sell/Buy?</a>
+        </div>
     </div>
+
 
     <div class="lodge-container">
         <!-- Example Lodge 1 -->
@@ -126,8 +142,8 @@
                 <a href="GnM.html" style="text-decoration: none;">
             <img src="Pictures-video of lodges/Goodness and Mercy Lodge.jpg" alt="Goodness and Mercy Lodge">
             <div class="lodge-info">
-                <h3>Goodness and Mercy Lodge</h3>
-                <p>Price: <s style="color: red;">₦330K/year</s><br><span style="color: green;">₦305K &#9989;</span></br></p>
+                <h3>Goodness and Mercy Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦330K/year</s><br><span style="color: green;">₦280K &#9989;</span></br></p>
             </div>
                 </a>
         </div>
@@ -137,8 +153,8 @@
             <a href="Love.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/love.jpg" alt="Love Crib Lodge">
             <div class="lodge-info">
-                <h3>Love Crib Lodge</h3>
-            <p>Price: <s style="color: red;">₦370K/year</s><br><span style="color: green;">₦290k + ₦50k (Cushion Fee - Refundable) = ₦340k&#9989;</span></br></p>
+                <h3>Love Crib Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+            <p>Price: <s style="color: red;">₦370K/year</s><br><span style="color: green;">₦280k + ₦50k (Cushion Fee - Refundable) = ₦330k&#9989;</span></br></p>
             </div>
             </a>
         </div>
@@ -148,8 +164,8 @@
             <a href="#" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Salvation Lodge.jpg" alt="Salvation Lodge">
             <div class="lodge-info">
-                <h3>Salvation Lodge <span style="color: red; font-size: small;">No vacancy available</span></h3>
-            <p>Price: <s style="color: red;">₦350K/year</s><br><span style="color: green;">₦320k + ₦10k (Security fee) = ₦330k&#9989;</span></br></p>
+                <h3>Salvation Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+            <p>Price: <s style="color: red;">₦350K/year</s><br><span style="color: green;">₦290k + ₦10k (Security fee) = ₦300k&#9989;</span></br></p>
             </div>
             </a>
         </div>
@@ -159,8 +175,8 @@
             <a href="#" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Amazing Grace Lodge.jpg" alt="Amazing Grace Lodge">
             <div class="lodge-info">
-                <h3>Amazing Grace Lodge</h3>
-            <p style="color: red;"><strong>Price:</strong> Unavailable-Under Construction</p>
+                <h3>Amazing Grace Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦310K/year</s><br><span style="color: green;">₦285k &#9989;</span></br></p>
             </div>
             </a>
         </div>
@@ -170,7 +186,7 @@
             <a href="BN lodge.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/BN lodge.jpg" alt="BN Lodge">
             <div class="lodge-info">
-                <h3>BN Lodge</h3>
+                <h3>BN Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
             <p>Price: <s style="color: red;">₦300K/year</s><br><span style="color: green;">₦265k&#9989;</span></br></p>
             </div>
             </a>
@@ -181,8 +197,8 @@
             <a href="grace.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Grace Lodge.jpg" alt="Grace Lodge">
             <div class="lodge-info">
-                <h3>Grace Lodge</h3>
-            <p>Price: <s style="color: red;">₦370K/year (Upstairs) and ₦350K/year (Downstairs) </s><br><span style="color: green;">₦350K/year (Upstairs) and ₦330K/year (Downstairs)&#9989;</span></br></p>
+                <h3>Grace Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+            <p>Price: <s style="color: red;">₦370K/year (Upstairs) and ₦350K/year (Downstairs) </s><br><span style="color: green;">₦300K/year (Upstairs) and ₦290K/year (Downstairs)&#9989;</span></br></p>
             </div>
             </a>
         </div>
@@ -191,8 +207,8 @@
                 <a href="BNA.html" style="text-decoration: none;">
             <img src="Pictures-video of lodges/BNA Lodge (Three SIsters).jpg" alt="Lodge 8">
                 <div class="lodge-info">
-            <h3>BNA Lodge (Three SIsters)</h3>
-            <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦305k &#9989;</span></br></p>    
+            <h3>BNA Lodge (Three SIsters) <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+            <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦280k &#9989;</span></br></p>    
                 </div>
                 </a>
         </div>
@@ -202,7 +218,7 @@
                     <a href="muna.html" style="text-decoration: none;">
                 <img src="Pictures-video of lodges/MUNA LODGE.png" alt="Muna Lodge">
                     <div class="lodge-info">
-                        <h3>Muna Lodge</h3>
+                        <h3>Muna Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
                         <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦295k &#9989;</span></br></p>
                     </div>
                     </a>
@@ -213,7 +229,7 @@
                     <a href="#" style="text-decoration: none;">
                 <img src="Pictures-video of lodges/ECOWAS.jpg" alt="EcoWas Lodge">
                     <div class="lodge-info">
-                        <h3>EcoWas Lodge</h3>
+                        <h3>EcoWas Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
                     <p>Price: <s style="color: red;">₦300k/year</s><br><span style="color: green;">₦275k &#9989;</span></br></p>
                     </div>
                     </a>
@@ -223,7 +239,7 @@
                                     <a href="#" style="text-decoration: none;">
                                 <img src="Pictures-video of lodges/Rose Lodge.jpg" alt="Rose Lodge">
                                     <div class="lodge-info">
-                                        <h3>Rose Lodge <span style="color: red; font-size: small;">No vacancy available</span></h3>
+                                        <h3>Rose Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
                                     <p>Price: <s style="color: red;">₦310k/year</s><br><span style="color: green;">₦270k &#9989;</span></br></p>
                                     </div>
                                     </a>
