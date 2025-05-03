@@ -3,116 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Homovaty</title>
+    <title>Explore Lodges</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
         }
-        .signup-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            max-width: 90%;
-        }
-        h2 {
-            text-align: center;
-            color: #007BFF;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             background-color: #007BFF;
             color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
+            padding: 5px 10px;
+            height: 60px;
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+        .logo {
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 115px;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .auth-area {
+            display: flex;
+            align-items: center;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            margin-right: 10px; /* Add some spacing between buttons and profile */
+        }
+        .auth-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            border-radius: 5px;
             cursor: pointer;
-            width: 100%;
+            text-decoration: none;
             font-size: 16px;
         }
-        button:hover {
-            background-color: #0056b3;
+        .auth-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
-        .error-message {
-            color: red;
-            margin-top: 10px;
+        .profile-picture-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .profile-picture-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hot-deals {
+            background-color: #FF5733;
+            color: white;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            width: 90%;
             text-align: center;
+            font-size: 15px;
         }
-        .success-message {
-            color: green;
-            margin-top: 10px;
-            text-align: center;
+        .hot-deals h2 {
+            margin: 0;
         }
-        .login-link {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
+        .hot-deals-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
         }
-        .login-link a {
-            color: #007BFF;
+
+        .btn {
+            background-color: white;
+            color: #FF5733;
+            padding: 10px 15px;
             text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            margin: 5px 0; /* Add some vertical margin for mobile view */
         }
-        .login-link a:hover {
-            text-decoration: underline;
+
+        .greeting-container {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .lodge-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .lodge {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .lodge img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .lodge-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .lodge-info h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .lodge-info p {
+            margin: 0;
+            color: #555;
+        }
+
+        .lodge-info s {
+            margin: 0;
+            color: #555;
+            font-size: small;
+        }
+
+        /* Media query for mobile devices (max-width: 600px) */
+        @media (max-width: 600px) {
+            .hot-deals-buttons {
+                flex-direction: column; /* Stack buttons vertically */
+                align-items: center; /* Center the buttons horizontally */
+            }
+
+            .btn {
+                width: 80%; /* Make buttons wider on mobile */
+                margin: 10px 0; /* Increase vertical margin for better spacing */
+            }
         }
     </style>
 </head>
 <body>
-    <div class="signup-container">
-        <h2>Sign Up</h2>
-        <form id="signup-form">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="confirm-password">Confirm Password:</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
-            </div>
-            <button type="submit">Sign Up</button>
-            <p id="signup-error" class="error-message"></p>
-            <p id="signup-success" class="success-message"></p>
-        </form>
-        <div class="login-link">
-            Already have an account? <a href="login.html">Log in</a>
+    <header>
+        <div class="logo">
+            <img src="Pictures-video of lodges/Homovate logo.png" alt="Homovate logo">
         </div>
+        <div id="auth-area" class="auth-area">
+            <div id="auth-buttons" class="auth-buttons">
+                <a href="signup.html" class="auth-button" id="signup-link">Sign Up</a>
+                <a href="login.html" class="auth-button" id="login-link">Login</a>
+            </div>
+            <div id="profile-container" class="profile-picture-container" style="display: none;">
+                <img id="profile-pic" src="images/default-user.png" alt="Profile Picture">
+            </div>
+        </div>
+    </header>
+
+    <div class="hot-deals">
+        <h2>🔥 Hot Deals 🔥</h2>
+        <p>These are the best lodges at unbeatable prices, offering luxury and convenience for students!</p>
+        <div class="hot-deals-buttons">
+            <a href="test.html" class="btn left-btn">Need a Roommate?</a>
+            <a href="IT.html" class="btn right-btn">Going for IT?</a>
+            <a href="Sell.html" class="btn">Sell/Buy?</a>
+        </div>
+    </div>
+
+    <div id="greeting-container" class="greeting-container" style="display: none;">
+        <h2 id="greeting-message"></h2>
+    </div>
+
+    <div class="lodge-container">
+        <div class="lodge">
+            <a href="GnM.html" style="text-decoration: none;">
+                <img src="Pictures-video of lodges/Goodness and Mercy Lodge.jpg" alt="Goodness and Mercy Lodge">
+                <div class="lodge-info">
+                    <h3>Goodness and Mercy Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                    <p>Price: <s style="color: red;">₦330K/year</s><br><span style="color: green;">₦280K &#9989;</span></br></p>
+                </div>
+            </a>
+        </div>
+
+        <div class="lodge">
+            <a href="love.html" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/love.jpg" alt="Love Crib Lodge">
+                <div class="lodge-info">
+                    <h3>Love Crib Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦370K/year</s><br><span style="color: green;">₦280k + ₦50k (Cushion Fee - Refundable) = ₦330k&#9989;</span></br></p>
+                </div>
+            </a>
+        </div>
+
+        <div class="lodge">
+            <a href="#" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/Salvation Lodge.jpg" alt="Salvation Lodge">
+                <div class="lodge-info">
+                    <h3>Salvation Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦350K/year</s><br><span style="color: green;">₦290k + ₦10k (Security fee) = ₦300k&#9989;</span></br></p>
+                </div>
+            </a>
+        </div>
+
+        <div class="lodge">
+            <a href="#" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/Amazing Grace Lodge.jpg" alt="Amazing Grace Lodge">
+                <div class="lodge-info">
+                    <h3>Amazing Grace Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                    <p>Price: <s style="color: red;">₦310K/year</s><br><span style="color: green;">₦285k &#9989;</span></br></p>
+                </div>
+            </a>
+        </div>
+
+        <div class="lodge">
+            <a href="BN lodge.html" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/BN lodge.jpg" alt="BN Lodge">
+                <div class="lodge-info">
+                    <h3>BN Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦300K/year</s><br><span style="color: green;">₦265k&#9989;</span></br></p>
+                </div>
+            </a>
+        </div>
+
+        <div class="lodge">
+            <a href="grace.html" style="text-decoration: none;">
+        <img src="Pictures-video of lodges/Grace Lodge.jpg" alt="Grace Lodge">
+                <div class="lodge-info">
+                    <h3>Grace Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦370K/year (Upstairs) and ₦350K/year (Downstairs) </s><br><span style="color: green;">₦300K/year (Upstairs) and ₦290K/year (Downstairs)&#9989;</span></br></p>
+                </div>
+            </a>
+        </div>
+                <div class="lodge">
+            <a href="BNA.html" style="text-decoration: none;">
+                <img src="Pictures-video of lodges/BNA Lodge (Three SIsters).jpg" alt="Lodge 8">
+                <div class="lodge-info">
+                <h3>BNA Lodge (Three SIsters) <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦280k &#9989;</span></br></p>
+                </div>
+            </a>
+        </div>
+
+                <div class="lodge">
+                    <a href="muna.html" style="text-decoration: none;">
+                <img src="Pictures-video of lodges/MUNA LODGE.png" alt="Muna Lodge">
+                        <div class="lodge-info">
+                            <h3>Muna Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                            <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦295k &#9989;</span></br></p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="lodge">
+                    <a href="#" style="text-decoration: none;">
+                <img src="Pictures-video of lodges/ECOWAS.jpg" alt="EcoWas Lodge">
+                        <div class="lodge-info">
+                            <h3>EcoWas Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                        <p>Price: <s style="color: red;">₦300k/year</s><br><span style="color: green;">₦275k &#9989;</span></br></p>
+                        </div>
+                    </a>
+                </div>
+                                        <div class="lodge">
+                                            <a href="#" style="text-decoration: none;">
+                                        <img src="Pictures-video of lodges/Rose Lodge.jpg" alt="Rose Lodge">
+                                                <div class="lodge-info">
+                                                    <h3>Rose Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                                                <p>Price: <s style="color: red;">₦310k/year</s><br><span style="color: green;">₦270k &#9989;</span></br></p>
+                                                </div>
+                                            </a>
+                                        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -121,13 +294,12 @@
     <script>
         // Your Firebase configuration object
         const firebaseConfig = {
-          apiKey: "YOUR_API_KEY",
-          authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-          databaseURL: "YOUR_DATABASE_URL", // Only if you're using Realtime Database
-          projectId: "YOUR_PROJECT_ID",
-          storageBucket: "YOUR_PROJECT_ID.appspot.com",
-          messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-          appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
+    authDomain: "roommateapp-3eb62.firebaseapp.com",
+    projectId: "roommateapp-3eb62",
+    storageBucket: "roommateapp-3eb62.firebasestorage.app",
+    messagingSenderId: "139896243034",
+    appId: "1:139896243034:web:a2ba925bcb4c0c967f2963"
         };
 
         // Initialize Firebase
@@ -135,55 +307,52 @@
 
         const auth = firebase.auth();
         const database = firebase.database();
-        const signupForm = document.getElementById('signup-form');
-        const signupError = document.getElementById('signup-error');
-        const signupSuccess = document.getElementById('signup-success');
+        const signupLink = document.getElementById('signup-link');
+        const loginLink = document.getElementById('login-link');
+        const profileContainer = document.getElementById('profile-container');
+        const profilePic = document.getElementById('profile-pic');
+        const authButtonsDiv = document.getElementById('auth-buttons');
+        const greetingContainer = document.getElementById('greeting-container');
+        const greetingMessage = document.getElementById('greeting-message');
 
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const nameInput = document.getElementById('name').value;
-            const usernameInput = document.getElementById('username').value;
-            const emailInput = document.getElementById('email').value;
-            const passwordInput = document.getElementById('password').value;
-            const confirmPasswordInput = document.getElementById('confirm-password').value;
+        // Replace 'images/default-user.png' with the actual path to your default user icon
+        const DEFAULT_PROFILE_PIC = 'images/default-user.png';
 
-            if (passwordInput !== confirmPasswordInput) {
-                signupError.textContent = 'Passwords do not match.';
-                signupSuccess.textContent = '';
-                return; // Stop the signup process if passwords don't match
-            }
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is logged in
+                authButtonsDiv.style.display = 'none';
+                profileContainer.style.display = 'flex';
+                greetingContainer.style.display = 'block'; // Show the greeting container
 
-            auth.createUserWithEmailAndPassword(emailInput, passwordInput)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    // Store additional user information in the database
-                    return database.ref('users/' + user.uid).set({
-                        name: nameInput,
-                        username: usernameInput,
-                        email: emailInput,
-                        profilePic: 'images/default-user.png' // Default profile picture
-                    });
-                })
-                .then(() => {
-                    signupSuccess.textContent = 'Sign up successful! Redirecting to login...';
-                    signupError.textContent = '';
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
-                })
-                .catch((error) => {
-                    let errorMessage = 'Sign up failed.';
-                    if (error.code === 'auth/email-already-in-use') {
-                        errorMessage = 'Email address is already in use.';
-                    } else if (error.code === 'auth/invalid-email') {
-                        errorMessage = 'Invalid email address.';
-                    } else if (error.code === 'auth/weak-password') {
-                        errorMessage = 'Password should be at least 6 characters.';
+                database.ref('users/' + user.uid).once('value', snapshot => {
+                    const userData = snapshot.val();
+                    if (userData && userData.username) {
+                        greetingMessage.textContent = `Hello, ${userData.username}!`;
+                    } else {
+                        greetingMessage.textContent = 'Hello!'; // Default greeting if username not found
                     }
-                    signupError.textContent = errorMessage;
-                    signupSuccess.textContent = '';
-                    console.error("Signup Error:", error); // Log the error for debugging
                 });
+
+                if (user.photoURL) {
+                    profilePic.src = user.photoURL;
+                } else {
+                    profilePic.src = DEFAULT_PROFILE_PIC;
+                }
+
+                profileContainer.addEventListener('click', () => {
+                    window.location.href = 'profile.html';
+                });
+            } else {
+                // User is logged out
+                authButtonsDiv.style.display = 'flex';
+                profileContainer.style.display = 'none';
+                greetingContainer.style.display = 'none'; // Hide the greeting container
+                profilePic.src = '';
+                profileContainer.removeEventListener('click', () => {
+                    window.location.href = 'profile.html';
+                });
+            }
         });
     </script>
 </body>
