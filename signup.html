@@ -157,28 +157,25 @@
                     const user = userCredential.user;
                     console.log("Firebase Authentication successful, UID:", user.uid);
 
-                    return database.ref('users/' + user.uid).set({
+                    // Attempt to write to the database (we'll observe the console for errors)
+                    database.ref('users/' + user.uid).set({
                         name: nameInput,
                         username: usernameInput,
                         email: emailInput,
                         profilePic: 'images/default-user.png'
                     }).then(() => {
                         console.log("Database write successful for UID:", user.uid);
-                        signupSuccess.textContent = 'Sign up successful! Redirecting to login...';
-                        signupError.textContent = '';
-                        setTimeout(() => {
-                            window.location.href = 'login.html';
-                        }, 2000);
                     }).catch((dbError) => {
                         console.error("Database write error:", dbError);
-                        signupError.textContent = 'Sign up failed: Error saving user data.';
-                        signupSuccess.textContent = '';
-                        // Optionally, you might want to delete the Firebase Auth user in this case
-                        // to prevent having users without corresponding data.
-                        user.delete().catch(deleteError => {
-                            console.error("Error deleting Firebase Auth user after DB write failure:", deleteError);
-                        });
+                        signupError.textContent = 'Sign up successful, but error saving user data.';
+                        // We will still attempt to redirect even if DB write fails for this test
                     });
+
+                    signupSuccess.textContent = 'Sign up successful! Redirecting to login...';
+                    signupError.textContent = '';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
                 })
                 .catch((authError) => {
                     let errorMessage = 'Sign up failed.';
@@ -190,7 +187,7 @@
                     } else if (authError.code === 'auth/weak-password') {
                         errorMessage = 'Password should be at least 6 characters.';
                     } else {
-                        errorMessage = `Sign up failed: ${authError.message}`; // More generic error
+                        errorMessage = `Sign up failed: ${authError.message}`;
                     }
                     signupError.textContent = errorMessage;
                     signupSuccess.textContent = '';
