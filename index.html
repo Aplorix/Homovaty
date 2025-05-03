@@ -34,6 +34,40 @@
             max-height: 100%;
             object-fit: contain;
         }
+        .auth-area {
+            display: flex;
+            align-items: center;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            margin-right: 10px; /* Add some spacing between buttons and profile */
+        }
+        .auth-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .auth-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .profile-picture-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .profile-picture-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .hot-deals {
             background-color: #FF5733;
             color: white;
@@ -53,16 +87,23 @@
             margin-top: 20px;
         }
 
-.btn {
-    background-color: white;
-    color: #FF5733;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 3px;
-    font-weight: bold;
-    margin: 5px 0; /* Add some vertical margin for mobile view */
-}
+        .btn {
+            background-color: white;
+            color: #FF5733;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            margin: 5px 0; /* Add some vertical margin for mobile view */
+        }
 
+        .greeting-container {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+        }
 
         .lodge-container {
             display: grid;
@@ -122,8 +163,16 @@
         <div class="logo">
             <img src="Pictures-video of lodges/Homovate logo.png" alt="Homovate logo">
         </div>
+        <div id="auth-area" class="auth-area">
+            <div id="auth-buttons" class="auth-buttons">
+                <a href="signup.html" class="auth-button" id="signup-link">Sign Up</a>
+                <a href="login.html" class="auth-button" id="login-link">Login</a>
+            </div>
+            <div id="profile-container" class="profile-picture-container" style="display: none;">
+                <img id="profile-pic" src="images/default-user.png" alt="Profile Picture">
+            </div>
+        </div>
     </header>
-
 
     <div class="hot-deals">
         <h2>🔥 Hot Deals 🔥</h2>
@@ -135,115 +184,176 @@
         </div>
     </div>
 
+    <div id="greeting-container" class="greeting-container" style="display: none;">
+        <h2 id="greeting-message"></h2>
+    </div>
 
     <div class="lodge-container">
-        <!-- Example Lodge 1 -->
         <div class="lodge">
-                <a href="GnM.html" style="text-decoration: none;">
-            <img src="Pictures-video of lodges/Goodness and Mercy Lodge.jpg" alt="Goodness and Mercy Lodge">
-            <div class="lodge-info">
-                <h3>Goodness and Mercy Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-                <p>Price: <s style="color: red;">₦330K/year</s><br><span style="color: green;">₦280K &#9989;</span></br></p>
-            </div>
-                </a>
+            <a href="GnM.html" style="text-decoration: none;">
+                <img src="Pictures-video of lodges/Goodness and Mercy Lodge.jpg" alt="Goodness and Mercy Lodge">
+                <div class="lodge-info">
+                    <h3>Goodness and Mercy Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                    <p>Price: <s style="color: red;">₦330K/year</s><br><span style="color: green;">₦280K &#9989;</span></br></p>
+                </div>
+            </a>
         </div>
 
-         <!-- Example Lodge 2 -->
         <div class="lodge">
             <a href="love.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/love.jpg" alt="Love Crib Lodge">
-            <div class="lodge-info">
-                <h3>Love Crib Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-            <p>Price: <s style="color: red;">₦370K/year</s><br><span style="color: green;">₦280k + ₦50k (Cushion Fee - Refundable) = ₦330k&#9989;</span></br></p>
-            </div>
+                <div class="lodge-info">
+                    <h3>Love Crib Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦370K/year</s><br><span style="color: green;">₦280k + ₦50k (Cushion Fee - Refundable) = ₦330k&#9989;</span></br></p>
+                </div>
             </a>
         </div>
 
-         <!-- Example Lodge 3 -->
-         <div class="lodge">
+        <div class="lodge">
             <a href="#" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Salvation Lodge.jpg" alt="Salvation Lodge">
-            <div class="lodge-info">
-                <h3>Salvation Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-            <p>Price: <s style="color: red;">₦350K/year</s><br><span style="color: green;">₦290k + ₦10k (Security fee) = ₦300k&#9989;</span></br></p>
-            </div>
+                <div class="lodge-info">
+                    <h3>Salvation Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦350K/year</s><br><span style="color: green;">₦290k + ₦10k (Security fee) = ₦300k&#9989;</span></br></p>
+                </div>
             </a>
         </div>
 
-         <!-- Example Lodge 4 -->
-         <div class="lodge">
+        <div class="lodge">
             <a href="#" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Amazing Grace Lodge.jpg" alt="Amazing Grace Lodge">
-            <div class="lodge-info">
-                <h3>Amazing Grace Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-                <p>Price: <s style="color: red;">₦310K/year</s><br><span style="color: green;">₦285k &#9989;</span></br></p>
-            </div>
+                <div class="lodge-info">
+                    <h3>Amazing Grace Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                    <p>Price: <s style="color: red;">₦310K/year</s><br><span style="color: green;">₦285k &#9989;</span></br></p>
+                </div>
             </a>
         </div>
 
-         <!-- Example Lodge 5 -->
-         <div class="lodge">
+        <div class="lodge">
             <a href="BN lodge.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/BN lodge.jpg" alt="BN Lodge">
-            <div class="lodge-info">
-                <h3>BN Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-            <p>Price: <s style="color: red;">₦300K/year</s><br><span style="color: green;">₦265k&#9989;</span></br></p>
-            </div>
+                <div class="lodge-info">
+                    <h3>BN Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦300K/year</s><br><span style="color: green;">₦265k&#9989;</span></br></p>
+                </div>
             </a>
         </div>
 
-         <!-- Example Lodge 6 -->
-         <div class="lodge">
+        <div class="lodge">
             <a href="grace.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Grace Lodge.jpg" alt="Grace Lodge">
-            <div class="lodge-info">
-                <h3>Grace Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-            <p>Price: <s style="color: red;">₦370K/year (Upstairs) and ₦350K/year (Downstairs) </s><br><span style="color: green;">₦300K/year (Upstairs) and ₦290K/year (Downstairs)&#9989;</span></br></p>
-            </div>
+                <div class="lodge-info">
+                    <h3>Grace Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦370K/year (Upstairs) and ₦350K/year (Downstairs) </s><br><span style="color: green;">₦300K/year (Upstairs) and ₦290K/year (Downstairs)&#9989;</span></br></p>
+                </div>
             </a>
         </div>
-                <!-- Example Lodge 7 -->
-        <div class="lodge">
-                <a href="BNA.html" style="text-decoration: none;">
-            <img src="Pictures-video of lodges/BNA Lodge (Three SIsters).jpg" alt="Lodge 8">
+                <div class="lodge">
+            <a href="BNA.html" style="text-decoration: none;">
+                <img src="Pictures-video of lodges/BNA Lodge (Three SIsters).jpg" alt="Lodge 8">
                 <div class="lodge-info">
-            <h3>BNA Lodge (Three SIsters) <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-            <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦280k &#9989;</span></br></p>    
+                <h3>BNA Lodge (Three SIsters) <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦280k &#9989;</span></br></p>
                 </div>
-                </a>
+            </a>
         </div>
 
-                 <!-- Example Lodge 8 -->
-                 <div class="lodge">
+                <div class="lodge">
                     <a href="muna.html" style="text-decoration: none;">
                 <img src="Pictures-video of lodges/MUNA LODGE.png" alt="Muna Lodge">
-                    <div class="lodge-info">
-                        <h3>Muna Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-                        <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦295k &#9989;</span></br></p>
-                    </div>
+                        <div class="lodge-info">
+                            <h3>Muna Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                            <p>Price: <s style="color: red;">₦320k/year</s><br><span style="color: green;">₦295k &#9989;</span></br></p>
+                        </div>
                     </a>
                 </div>
 
-                <!-- Example Lodge 9 -->
                 <div class="lodge">
                     <a href="#" style="text-decoration: none;">
                 <img src="Pictures-video of lodges/ECOWAS.jpg" alt="EcoWas Lodge">
-                    <div class="lodge-info">
-                        <h3>EcoWas Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-                    <p>Price: <s style="color: red;">₦300k/year</s><br><span style="color: green;">₦275k &#9989;</span></br></p>
-                    </div>
+                        <div class="lodge-info">
+                            <h3>EcoWas Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                        <p>Price: <s style="color: red;">₦300k/year</s><br><span style="color: green;">₦275k &#9989;</span></br></p>
+                        </div>
                     </a>
-                </div> 
-                                 <!-- Example Lodge 10 -->
-                                 <div class="lodge">
-                                    <a href="#" style="text-decoration: none;">
-                                <img src="Pictures-video of lodges/Rose Lodge.jpg" alt="Rose Lodge">
-                                    <div class="lodge-info">
-                                        <h3>Rose Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
-                                    <p>Price: <s style="color: red;">₦310k/year</s><br><span style="color: green;">₦270k &#9989;</span></br></p>
-                                    </div>
-                                    </a>
-                                </div>                
-    </div>    
+                </div>
+                                        <div class="lodge">
+                                            <a href="#" style="text-decoration: none;">
+                                        <img src="Pictures-video of lodges/Rose Lodge.jpg" alt="Rose Lodge">
+                                                <div class="lodge-info">
+                                                    <h3>Rose Lodge <span style="color: red; font-size: small;">Will be available by May 20th</span></h3>
+                                                <p>Price: <s style="color: red;">₦310k/year</s><br><span style="color: green;">₦270k &#9989;</span></br></p>
+                                                </div>
+                                            </a>
+                                        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script>
+        // Your Firebase configuration object
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
+    authDomain: "roommateapp-3eb62.firebaseapp.com",
+    projectId: "roommateapp-3eb62",
+    storageBucket: "roommateapp-3eb62.firebasestorage.app",
+    messagingSenderId: "139896243034",
+    appId: "1:139896243034:web:a2ba925bcb4c0c967f2963"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const signupLink = document.getElementById('signup-link');
+        const loginLink = document.getElementById('login-link');
+        const profileContainer = document.getElementById('profile-container');
+        const profilePic = document.getElementById('profile-pic');
+        const authButtonsDiv = document.getElementById('auth-buttons');
+        const greetingContainer = document.getElementById('greeting-container');
+        const greetingMessage = document.getElementById('greeting-message');
+
+        // Replace 'images/default-user.png' with the actual path to your default user icon
+        const DEFAULT_PROFILE_PIC = 'images/default-user.png';
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is logged in
+                authButtonsDiv.style.display = 'none';
+                profileContainer.style.display = 'flex';
+                greetingContainer.style.display = 'block'; // Show the greeting container
+
+                database.ref('users/' + user.uid).once('value', snapshot => {
+                    const userData = snapshot.val();
+                    if (userData && userData.username) {
+                        greetingMessage.textContent = `Hello, ${userData.username}!`;
+                    } else {
+                        greetingMessage.textContent = 'Hello!'; // Default greeting if username not found
+                    }
+                });
+
+                if (user.photoURL) {
+                    profilePic.src = user.photoURL;
+                } else {
+                    profilePic.src = DEFAULT_PROFILE_PIC;
+                }
+
+                profileContainer.addEventListener('click', () => {
+                    window.location.href = 'profile.html';
+                });
+            } else {
+                // User is logged out
+                authButtonsDiv.style.display = 'flex';
+                profileContainer.style.display = 'none';
+                greetingContainer.style.display = 'none'; // Hide the greeting container
+                profilePic.src = '';
+                profileContainer.removeEventListener('click', () => {
+                    window.location.href = 'profile.html';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
