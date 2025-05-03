@@ -164,12 +164,9 @@
                     });
                 })
                 .then(() => {
-                    signupSuccess.textContent = 'Sign up successful! Redirecting to login...';
-                    signupError.textContent = '';
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
-                })
+    console.log("Sign up successful!"); // Check if this logs
+    window.location.href = 'login.html';
+                 })
                 .catch((error) => {
                     let errorMessage = 'Sign up failed.';
                     if (error.code === 'auth/email-already-in-use') {
