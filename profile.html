@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile - Homovaty</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .profile-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 450px;
+            max-width: 95%;
+            text-align: center;
+        }
+        .profile-picture-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            border: 2px solid #007BFF;
+            cursor: pointer;
+        }
+        .profile-picture-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-picture-container input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+        .profile-info p, .edit-profile label, .edit-profile input, .edit-profile select {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .profile-info strong {
+            font-weight: bold;
+        }
+        .edit-profile {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .edit-profile input[type="text"],
+        .edit-profile select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        .edit-buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .edit-button, .save-button, .cancel-button, .chat-button, .logout-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        .save-button {
+            background-color: #28a745;
+        }
+        .cancel-button {
+            background-color: #dc3545;
+        }
+        .chat-button {
+            background-color: #17a2b8;
+        }
+        .logout-button {
+            background-color: #dc3545;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .edit-button:hover, .save-button:hover, .cancel-button:hover, .chat-button:hover, .logout-button:hover {
+            opacity: 0.9;
+        }
+        .back-button {
+            display: block;
+            margin-top: 15px;
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-button:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+        .upload-progress {
+            margin-top: 10px;
+            color: gray;
+            font-size: small;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h2>Your Profile</h2>
+        <div class="profile-picture-container">
+            <img id="profile-pic" src="images/default-user.png" alt="Profile Picture">
+            <input type="file" id="profile-pic-upload" accept="image/*">
+        </div>
+        <p id="upload-progress" class="upload-progress hidden">Uploading...</p>
+        <div class="profile-info">
+            <p><strong>Name:</strong> <span id="name">Loading...</span></p>
+            <p><strong>Username:</strong> <span id="username">Loading...</span></p>
+            <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+            <p><strong>Department:</strong> <span id="department">Loading...</span></p>
+            <p><strong>Level:</strong> <span id="level">Loading...</span></p>
+            <p><strong>Course:</strong> <span id="course">Loading...</span></p>
+            <p><strong>Lodge:</strong> <span id="lodge">Loading...</span></p>
+        </div>
+
+        <div id="edit-profile-section" class="edit-profile hidden">
+            <h3>Edit Profile</h3>
+            <label for="edit-name">Name:</label>
+            <input type="text" id="edit-name">
+
+            <label for="edit-username">Username:</label>
+            <input type="text" id="edit-username">
+
+            <label for="edit-department">Department:</label>
+            <input type="text" id="edit-department">
+
+            <label for="edit-level">Level:</label>
+            <select id="edit-level">
+                <option value="">Select Level</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="300">300</option>
+                <option value="400">400</option>
+                <option value="500">500</option>
+                <option value="600">600</option>
+            </select>
+
+            <label for="edit-course">Course:</label>
+            <input type="text" id="edit-course">
+
+            <label for="edit-lodge">Lodge (Optional):</label>
+            <input type="text" id="edit-lodge">
+
+            <div class="edit-buttons">
+                <button id="save-btn" class="save-button">Save Changes</button>
+                <button id="cancel-btn" class="cancel-button">Cancel</button>
+            </div>
+        </div>
+
+        <button id="edit-btn" class="edit-button">Edit Profile</button>
+        <button id="chat-btn" class="chat-button hidden">Chat with <span id="chat-username"></span></button>
+        <button id="logout-btn" class="logout-button">Logout</button>
+        <a href="index.html" class="back-button">Back to Home</a>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script>
+        // Your Firebase configuration object
+        const firebaseConfig = {
+      apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
+      authDomain: "roommateapp-3eb62.firebaseapp.com",
+      projectId: "roommateapp-3eb62",
+      storageBucket: "roommateapp-3eb62.appspot.com",
+      messagingSenderId: "139896243034",
+      appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
+      databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
+    };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const storage = firebase.storage();
+
+        const profilePic = document.getElementById('profile-pic');
+        const profilePicUpload = document.getElementById('profile-pic-upload');
+        const uploadProgress = document.getElementById('upload-progress');
+        const nameDisplay = document.getElementById('name');
+        const usernameDisplay = document.getElementById('username');
+        const emailDisplay = document.getElementById('email');
+        const departmentDisplay = document.getElementById('department');
+        const levelDisplay = document.getElementById('level');
+        const courseDisplay = document.getElementById('course');
+        const lodgeDisplay = document.getElementById('lodge');
+
+        const editProfileSection = document.getElementById('edit-profile-section');
+        const editNameInput = document.getElementById('edit-name');
+        const editUsernameInput = document.getElementById('edit-username');
+        const editDepartmentInput = document.getElementById('edit-department');
+        const editLevelSelect = document.getElementById('edit-level');
+        const editCourseInput = document.getElementById('edit-course');
+        const editLodgeInput = document.getElementById('edit-lodge');
+
+        const editButton = document.getElementById('edit-btn');
+        const saveButton = document.getElementById('save-btn');
+        const cancelButton = document.getElementById('cancel-btn');
+        const chatButton = document.getElementById('chat-btn');
+        const chatUsernameDisplay = document.getElementById('chat-username');
+        const logoutButton = document.getElementById('logout-btn');
+
+        function getProfileIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('uid');
+        }
+
+        const viewedProfileId = getProfileIdFromUrl();
+        let loggedInUserId;
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loggedInUserId = user.uid;
+                let profileIdToLoad = loggedInUserId;
+
+                if (viewedProfileId && viewedProfileId !== loggedInUserId) {
+                    profileIdToLoad = viewedProfileId;
+                    editButton.classList.add('hidden');
+                    chatButton.classList.remove('hidden');
+                    // Disable profile picture change for other users
+                    profilePicUpload.disabled = true;
+                    const profilePicContainer = document.querySelector('.profile-picture-container');
+                    if (profilePicContainer) {
+                        profilePicContainer.style.cursor = 'default';
+                    }
+                } else {
+                    editButton.classList.remove('hidden');
+                    chatButton.classList.add('hidden');
+                    profilePicUpload.disabled = false;
+                    const profilePicContainer = document.querySelector('.profile-picture-container');
+                    if (profilePicContainer) {
+                        profilePicContainer.style.cursor = 'pointer';
+                    }
+                }
+
+                database.ref('users/' + profileIdToLoad).once('value', snapshot => {
+                    const userData = snapshot.val();
+                    if (userData) {
+                        nameDisplay.textContent = userData.name || 'N/A';
+                        usernameDisplay.textContent = userData.username || 'N/A';
+                        emailDisplay.textContent = userData.email || user.email || 'N/A';
+                        departmentDisplay.textContent = userData.department || 'N/A';
+                        levelDisplay.textContent = userData.level || 'N/A';
+                        courseDisplay.textContent = userData.course || 'N/A';
+                        lodgeDisplay.textContent = userData.lodge || 'N/A';
+                        if (userData.profilePic) {
+                            profilePic.src = userData.profilePic;
+                        }
+                        if (profileIdToLoad !== loggedInUserId && userData.username) {
+                            chatUsernameDisplay.textContent = userData.username;
+                        }
+                        if (profileIdToLoad === loggedInUserId) {
+                            editNameInput.value = userData.name || '';
+                            editUsernameInput.value = userData.username || '';
+                            editDepartmentInput.value = userData.department || '';
+                            editLevelSelect.value = userData.level || '';
+                            editCourseInput.value = userData.course || '';
+                            editLodgeInput.value = userData.lodge || '';
+                        }
+                    } else {
+                        nameDisplay.textContent = 'N/A';
+                        usernameDisplay.textContent = 'N/A';
+                        emailDisplay.textContent = user.email || 'N/A';
+                        departmentDisplay.textContent = 'N/A';
+                        levelDisplay.textContent = 'N/A';
+                        courseDisplay.textContent = 'N/A';
+                        lodgeDisplay.textContent = 'N/A';
+                    }
+                });
+
+                if (user.photoURL) {
+                    profilePic.src = user.photoURL;
+                }
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        editButton.addEventListener('click', () => {
+            document.querySelector('.profile-info').classList.add('hidden');
+            editProfileSection.classList.remove('hidden');
+            editButton.classList.add('hidden');
+        });
+
+        cancelButton.addEventListener('click', () => {
+            document.querySelector('.profile-info').classList.remove('hidden');
+            editProfileSection.classList.add('hidden');
+            editButton.classList.remove('hidden');
+        });
+
+        saveButton.addEventListener('click', () => {
+            const updatedData = {
+                name: editNameInput.value.trim(),
+                username: editUsernameInput.value.trim(),
+                department: editDepartmentInput.value.trim(),
+                level: editLevelSelect.value,
+                course: editCourseInput.value.trim(),
+                lodge: editLodgeInput.value.trim()
+            };
+
+            database.ref('users/' + loggedInUserId).update(updatedData)
+                .then(() => {
+                    alert('Profile updated successfully!');
+                    document.querySelector('.profile-info').classList.remove('hidden');
+                    editProfileSection.classList.add('hidden');
+                    editButton.classList.remove('hidden');
+                    // Refresh displayed data
+                    nameDisplay.textContent = updatedData.name || 'N/A';
+                    usernameDisplay.textContent = updatedData.username || 'N/A';
+                    departmentDisplay.textContent = updatedData.department || 'N/A';
+                    levelDisplay.textContent = updatedData.level || 'N/A';
+                    courseDisplay.textContent = updatedData.course || 'N/A';
+                    lodgeDisplay.textContent = updatedData.lodge || 'N/A';
+                })
+                .catch((error) => {
+                    console.error('Error updating profile:', error);
+                    alert('Error updating profile. Please try again.');
+                });
+        });
+
+        const profilePicContainer = document.querySelector('.profile-picture-container');
+        profilePicUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                uploadProfilePicture(file);
+            }
+        });
+
+        async function uploadProfilePicture(file) {
+            uploadProgress.classList.remove('hidden');
+            const storageRef = storage.ref('profile-pictures/' + loggedInUserId + '/' + file.name);
+            const uploadTask = storageRef.put(file);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    uploadProgress.textContent = `Uploading: ${progress.toFixed(0)}%`;
+                },
+                (error) => {
+                    console.error('Error uploading image:', error);
+                    alert('Error uploading profile picture. Please try again.');
+                    uploadProgress.classList.add('hidden');
+                },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                        database.ref('users/' + loggedInUserId).update({
+                            profilePic: downloadURL
+                        }).then(() => {
+                            profilePic.src = downloadURL;
+                            uploadProgress.classList.add('hidden');
+                            alert('Profile picture updated!');
+                        }).catch((error) => {
+                            console.error('Error updating database with image URL:', error);
+                            alert('Error updating profile. Please try again.');
+                            uploadProgress.classList.add('hidden');
+                        });
+                    });
+                }
+            );
+        }
+
+       chatButton.addEventListener('click', () => {
+            const chatWithUsername = chatUsernameDisplay.textContent;
+            window.location.href = `chat.html?username=${chatWithUsername}`;
+            // You'll need to create the 'chat.html' page and its functionality
+            // to handle the chat with the specified user.
+        });
+
+        logoutButton.addEventListener('click', () => {
+            auth.signOut().then(() => {
+                window.location.href = 'login.html';
+            }).catch((error) => {
+                console.error('Logout Error:', error);
+                alert('Error logging out. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
