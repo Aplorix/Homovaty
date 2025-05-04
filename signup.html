@@ -152,11 +152,11 @@
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
 
+        // Save user data in Firebase Database (without profile pic)
         await database.ref('users/' + user.uid).set({
           name: name,
           username: username,
-          email: email,
-          profilePic: 'images/default-user.png'
+          email: email
         });
 
         signupSuccess.textContent = "Signup successful! Redirecting...";
