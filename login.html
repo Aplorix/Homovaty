@@ -97,13 +97,14 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
-    authDomain: "roommateapp-3eb62.firebaseapp.com",
-    projectId: "roommateapp-3eb62",
-    storageBucket: "roommateapp-3eb62.firebasestorage.app",
-    messagingSenderId: "139896243034",
-    appId: "1:139896243034:web:a2ba925bcb4c0c967f2963"
-        };
+      apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
+      authDomain: "roommateapp-3eb62.firebaseapp.com",
+      projectId: "roommateapp-3eb62",
+      storageBucket: "roommateapp-3eb62.appspot.com",
+      messagingSenderId: "139896243034",
+      appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
+      databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
+    };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const loginForm = document.getElementById('login-form');
