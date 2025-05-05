@@ -58,8 +58,8 @@
         }
         .icon-button-container {
             display: flex;
-            gap: 10px; /* Space between the icons */
-            align-items: center; /* Vertically center icons */
+            gap: 10px;
+            align-items: center;
         }
         .icon-button {
             width: 40px;
@@ -67,22 +67,22 @@
             border-radius: 50%;
             overflow: hidden;
             cursor: pointer;
-            display: flex; /* For centering the icon inside */
+            display: flex;
             justify-content: center;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white */
+            background-color: rgba(255, 255, 255, 0.3);
             border: 1px solid white;
         }
         .icon-button img {
-            width: 80%; /* Make the icon smaller than the container */
+            width: 80%;
             height: 80%;
-            object-fit: contain; /* Ensure the icon fits within the bounds */
+            object-fit: contain;
         }
         .icon-button:hover {
-            background-color: rgba(255, 255, 255, 0.5); /* Slightly more opaque on hover */
+            background-color: rgba(255, 255, 255, 0.5);
         }
         #notifications-icon {
-             position: relative; /* To position the badge */
+             position: relative;
         }
        .notification-badge {
             position: absolute;
@@ -94,9 +94,9 @@
             padding: 2px 4px;
             border-radius: 50%;
             border: 1px solid white;
-            display: none; /* Initially hidden */
-            min-width: 10px; /* Ensure it has some width even with small numbers */
-            text-align: center; /* Center the number inside the badge */
+            display: none;
+            min-width: 10px;
+            text-align: center;
         }
 
         .profile-picture-container {
@@ -196,20 +196,20 @@
                 margin: 10px 0;
             }
              header {
-                flex-wrap: wrap; /* Allow header items to wrap on small screens */
-                justify-content: center; /* Center items horizontally on small screens */
-                gap: 10px; /* Add some gap between header elements */
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
             }
             .logo {
-                margin-bottom: 10px; /* Add space below logo on small screens */
+                margin-bottom: 10px;
             }
             .auth-area {
-                flex-direction: column; /* Stack buttons and icons vertically on small screens */
+                flex-direction: column;
                 align-items: center;
                 gap: 10px;
             }
             .auth-buttons {
-                margin-right: 0; /* Remove right margin on small screens */
+                margin-right: 0;
             }
         }
     </style>
@@ -224,7 +224,8 @@
                 <a href="signup.html" class="auth-button" id="signup-link">Sign Up</a>
                 <a href="login.html" class="auth-button" id="login-link">Login</a>
             </div>
-            <div class="icon-button-container" style="display: none;"> <div id="users-icon" class="icon-button">
+            <div class="icon-button-container" style="display: none;">
+                <div id="users-icon" class="icon-button">
                     <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/users.svg" alt="Users">
                 </div>
                 <div id="chats-icon" class="icon-button">
@@ -382,22 +383,22 @@
         const usersIcon = document.getElementById('users-icon');
         const chatsIcon = document.getElementById('chats-icon');
         const notificationBadge = document.getElementById('notification-badge');
+        const iconButtonContainer = document.querySelector('.icon-button-container');
 
 
         // Replace 'images/default-user.png' with the actual path to your default user icon
         const DEFAULT_PROFILE_PIC = 'images/default-user.png';
-        const ALL_USERS_LIST = 'all_users.html'; // You will create this page
-        const CHAT_PAGE = 'chat.html'; //  You will create this page
+        const ALL_USERS_LIST = 'all_users.html';
+        const CHAT_PAGE = 'chat.html';
 
-        let unreadMessageCount = 0; //  For demonstration
+        let unreadMessageCount = 0;
 
         auth.onAuthStateChanged(user => {
             if (user) {
                 // User is logged in
                 authButtonsDiv.style.display = 'none';
-                profileContainer.style.display = 'flex';
+                iconButtonContainer.style.display = 'flex';
                 greetingContainer.style.display = 'block';
-                document.querySelector('.icon-button-container').style.display = 'flex';
 
                 database.ref('users/' + user.uid).once('value', snapshot => {
                     const userData = snapshot.val();
@@ -426,17 +427,13 @@
                     window.location.href = CHAT_PAGE;
                 });
 
-                // Simulate new messages.
-                // In a real app, you would listen to changes in your database
-                // and update this count dynamically.
                 simulateNewMessages();
 
             } else {
                 // User is logged out
                 authButtonsDiv.style.display = 'flex';
-                profileContainer.style.display = 'none';
+                iconButtonContainer.style.display = 'none';
                 greetingContainer.style.display = 'none';
-                document.querySelector('.icon-button-container').style.display = 'none';
                 profilePic.src = '';
                 profileContainer.removeEventListener('click', () => {
                     window.location.href = 'profile.html';
@@ -454,15 +451,10 @@
 
 
         function simulateNewMessages() {
-            // Simulate receiving a few messages after a delay
             setTimeout(() => {
                 unreadMessageCount = 3;
                 updateNotificationBadge();
             }, 2000);
-           /* setTimeout(() => {  // For testing, to see badge go away
-                unreadMessageCount = 0;
-                updateNotificationBadge();
-            }, 5000); */
         }
 
         function updateNotificationBadge() {
