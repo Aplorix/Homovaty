@@ -179,21 +179,23 @@
     <script>
         // Your Firebase configuration object
         const firebaseConfig = {
-      apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
-      authDomain: "roommateapp-3eb62.firebaseapp.com",
-      projectId: "roommateapp-3eb62",
-      storageBucket: "roommateapp-3eb62.appspot.com",
-      messagingSenderId: "139896243034",
-      appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
-      databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
-    };
+            apiKey: "YOUR_API_KEY",
+            authDomain: "roommateapp-3eb62.firebaseapp.com",
+            projectId: "roommateapp-3eb62",
+            storageBucket: "roommateapp-3eb62.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "1:YOUR_APP_ID:web:YOUR_WEB_APP_ID", //  Use the correct App ID
+            databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
-        const auth = firebase.auth();        const database = firebase.database();
+        const auth = firebase.auth();
+        const database = firebase.database();
         const storage = firebase.storage();
 
+        const profilePic = document.getElementById('profile-pic');
         const nameDisplay = document.getElementById('name');
         const usernameDisplay = document.getElementById('username');
         const emailDisplay = document.getElementById('email');
@@ -287,6 +289,17 @@
             courseDisplay.textContent = userData.course || 'N/A';
             lodgeDisplay.textContent = userData.lodge || 'N/A';
 
+            let profilePictureUrl = userData.profilePicture;
+            if (profilePictureUrl) {
+                profilePic.src = profilePictureUrl;
+            } else {
+                profilePic.src = "Pictures-video of lodges/profilepic.png?raw=true";
+            }
+             if (viewedProfileId !== loggedInUserId && userData.username) {
+                chatUsernameDisplay.textContent = userData.username;
+            }
+        }
+
         function populateEditFields(userData) {
             editNameInput.value = userData.name || '';
             editUsernameInput.value = userData.username || '';
@@ -295,6 +308,8 @@
             editCourseInput.value = userData.course || '';
             editLodgeInput.value = userData.lodge || '';
         }
+
+
 
         editButton.addEventListener('click', () => {
             document.querySelector('.profile-info').classList.add('hidden');
