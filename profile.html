@@ -120,7 +120,7 @@
     <div class="profile-container">
         <h2>Your Profile</h2>
         <div class="profile-picture-container">
-            <img id="profile-pic" src="Pictures-video of lodges/profilepic.png" alt="Profile Picture">
+            <img id="profile-pic" src="images/default-user.png" alt="Profile Picture">
         </div>
         <div class="profile-info">
             <p><strong>Name:</strong> <span id="name">Loading...</span></p>
@@ -175,6 +175,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script>
         // Your Firebase configuration object
         const firebaseConfig = {
@@ -192,6 +193,7 @@
 
         const auth = firebase.auth();
         const database = firebase.database();
+        const storage = firebase.storage();
 
         const profilePic = document.getElementById('profile-pic');
         const nameDisplay = document.getElementById('name');
@@ -224,10 +226,12 @@
 
         const viewedProfileId = getProfileIdFromUrl();
         let loggedInUserId;
+        let currentUser;
 
         auth.onAuthStateChanged(user => {
             if (user) {
                 loggedInUserId = user.uid;
+                currentUser = user;
                 let profileIdToLoad = loggedInUserId;
 
                 if (viewedProfileId && viewedProfileId !== loggedInUserId) {
@@ -244,52 +248,59 @@
                     chatButton.classList.add('hidden');
                     const profilePicContainer = document.querySelector('.profile-picture-container');
                     if (profilePicContainer) {
-                         profilePicContainer.style.cursor = 'default'; // Or leave it as is
+                        profilePicContainer.style.cursor = 'pointer'; // Or leave it as is
                     }
                 }
 
-                database.ref('users/' + profileIdToLoad).once('value', snapshot => {
-                    const userData = snapshot.val();
-                    if (userData) {
-                        nameDisplay.textContent = userData.name || 'N/A';
-                        usernameDisplay.textContent = userData.username || 'N/A';
-                        emailDisplay.textContent = userData.email || user.email || 'N/A';
-                        departmentDisplay.textContent = userData.department || 'N/A';
-                        levelDisplay.textContent = userData.level || 'N/A';
-                        courseDisplay.textContent = userData.course || 'N/A';
-                        lodgeDisplay.textContent = userData.lodge || 'N/A';
-                       //profilePic.src = "https://github.com/Kelvins-Programmer/Homovaty-Profile-Pics/blob/main/default-user.png?raw=true"; //Set default profile pic.
-                        if (profileIdToLoad !== loggedInUserId && userData.username) {
-                            chatUsernameDisplay.textContent = userData.username;
-                        }
-                        if (profileIdToLoad === loggedInUserId) {
-                            editNameInput.value = userData.name || '';
-                            editUsernameInput.value = userData.username || '';
-                            editDepartmentInput.value = userData.department || '';
-                            editLevelSelect.value = userData.level || '';
-                            editCourseInput.value = userData.course || '';
-                            editLodgeInput.value = userData.lodge || '';
-                        }
-                    } else {
-                        nameDisplay.textContent = 'N/A';
-                        usernameDisplay.textContent = 'N/A';
-                        emailDisplay.textContent = user.email || 'N/A';
-                        departmentDisplay.textContent = 'N/A';
-                        levelDisplay.textContent = 'N/A';
-                        courseDisplay.textContent = 'N/A';
-                        lodgeDisplay.textContent = 'N/A';
-                    }
-                });
+                loadUserProfile(profileIdToLoad);
 
-                if (user.photoURL) {
-                   // profilePic.src = user.photoURL;  // No longer use user's photo URL
-                } else{
-                     profilePic.src = "https://github.com/Kelvins-Programmer/Homovaty-Profile-Pics/blob/main/default-user.png?raw=true";
-                }
             } else {
                 window.location.href = 'login.html';
             }
         });
+
+        function loadUserProfile(profileId) {
+            database.ref('users/' + profileId).once('value', snapshot => {
+                const userData = snapshot.val();
+                if (userData) {
+                    nameDisplay.textContent = userData.name || 'N/A';
+                    usernameDisplay.textContent = userData.username || 'N/A';
+                    emailDisplay.textContent = userData.email || currentUser.email || 'N/A';
+                    departmentDisplay.textContent = userData.department || 'N/A';
+                    levelDisplay.textContent = userData.level || 'N/A';
+                    courseDisplay.textContent = userData.course || 'N/A';
+                    lodgeDisplay.textContent = userData.lodge || 'N/A';
+
+                    let profilePictureUrl = userData.profilePicture;
+                    if (profilePictureUrl) {
+                        profilePic.src = profilePictureUrl;
+                    } else {
+                        profilePic.src = "Pictures-video of lodges/profilepic.png?raw=true";
+                    }
+
+                    if (profileId !== loggedInUserId && userData.username) {
+                        chatUsernameDisplay.textContent = userData.username;
+                    }
+                    if (profileId === loggedInUserId) {
+                        editNameInput.value = userData.name || '';
+                        editUsernameInput.value = userData.username || '';
+                        editDepartmentInput.value = userData.department || '';
+                        editLevelSelect.value = userData.level || '';
+                        editCourseInput.value = userData.course || '';
+                        editLodgeInput.value = userData.lodge || '';
+                    }
+                } else {
+                    nameDisplay.textContent = 'N/A';
+                    usernameDisplay.textContent = 'N/A';
+                    emailDisplay.textContent = currentUser.email || 'N/A';
+                    departmentDisplay.textContent = 'N/A';
+                    levelDisplay.textContent = 'N/A';
+                    courseDisplay.textContent = 'N/A';
+                    lodgeDisplay.textContent = 'N/A';
+                    profilePic.src = "Pictures-video of lodges/profilepic.png?raw=true";
+                }
+            });
+        }
 
         editButton.addEventListener('click', () => {
             document.querySelector('.profile-info').classList.add('hidden');
@@ -313,19 +324,14 @@
                 lodge: editLodgeInput.value.trim()
             };
 
+            // Update the database
             database.ref('users/' + loggedInUserId).update(updatedData)
                 .then(() => {
                     alert('Profile updated successfully!');
                     document.querySelector('.profile-info').classList.remove('hidden');
                     editProfileSection.classList.add('hidden');
                     editButton.classList.remove('hidden');
-                    // Refresh displayed data
-                    nameDisplay.textContent = updatedData.name || 'N/A';
-                    usernameDisplay.textContent = updatedData.username || 'N/A';
-                    departmentDisplay.textContent = updatedData.department || 'N/A';
-                    levelDisplay.textContent = updatedData.level || 'N/A';
-                    courseDisplay.textContent = updatedData.course || 'N/A';
-                    lodgeDisplay.textContent = updatedData.lodge || 'N/A';
+                    loadUserProfile(loggedInUserId);
                 })
                 .catch((error) => {
                     console.error('Error updating profile:', error);
@@ -333,12 +339,9 @@
                 });
         });
 
-
         chatButton.addEventListener('click', () => {
             const chatWithUsername = chatUsernameDisplay.textContent;
             window.location.href = `chat.html?username=${chatWithUsername}`;
-            // You'll need to create the 'chat.html' page and its functionality
-            // to handle the chat with the specified user.
         });
 
         logoutButton.addEventListener('click', () => {
@@ -352,3 +355,4 @@
     </script>
 </body>
 </html>
+
