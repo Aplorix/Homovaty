@@ -24,28 +24,17 @@
             text-align: center;
         }
         .profile-picture-container {
-            position: relative;
             width: 100px;
             height: 100px;
             border-radius: 50%;
             overflow: hidden;
             margin: 0 auto 20px;
             border: 2px solid #007BFF;
-            cursor: pointer;
         }
         .profile-picture-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-        .profile-picture-container input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
         }
         h2 {
             color: #007BFF;
@@ -131,10 +120,8 @@
     <div class="profile-container">
         <h2>Your Profile</h2>
         <div class="profile-picture-container">
-            <img id="profile-pic" src="images/default-user.png" alt="Profile Picture">
-            <input type="file" id="profile-pic-upload" accept="image/*">
+            <img id="profile-pic" src="Pictures-video of lodges/profilepic.png" alt="Profile Picture">
         </div>
-        <p id="upload-progress" class="upload-progress hidden">Uploading...</p>
         <div class="profile-info">
             <p><strong>Name:</strong> <span id="name">Loading...</span></p>
             <p><strong>Username:</strong> <span id="username">Loading...</span></p>
@@ -188,7 +175,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script>
         // Your Firebase configuration object
         const firebaseConfig = {
@@ -206,11 +192,8 @@
 
         const auth = firebase.auth();
         const database = firebase.database();
-        const storage = firebase.storage();
 
         const profilePic = document.getElementById('profile-pic');
-        const profilePicUpload = document.getElementById('profile-pic-upload');
-        const uploadProgress = document.getElementById('upload-progress');
         const nameDisplay = document.getElementById('name');
         const usernameDisplay = document.getElementById('username');
         const emailDisplay = document.getElementById('email');
@@ -251,8 +234,7 @@
                     profileIdToLoad = viewedProfileId;
                     editButton.classList.add('hidden');
                     chatButton.classList.remove('hidden');
-                    // Disable profile picture change for other users
-                    profilePicUpload.disabled = true;
+                    // The profile picture should not be clickable.
                     const profilePicContainer = document.querySelector('.profile-picture-container');
                     if (profilePicContainer) {
                         profilePicContainer.style.cursor = 'default';
@@ -260,10 +242,9 @@
                 } else {
                     editButton.classList.remove('hidden');
                     chatButton.classList.add('hidden');
-                    profilePicUpload.disabled = false;
                     const profilePicContainer = document.querySelector('.profile-picture-container');
                     if (profilePicContainer) {
-                        profilePicContainer.style.cursor = 'pointer';
+                         profilePicContainer.style.cursor = 'default'; // Or leave it as is
                     }
                 }
 
@@ -277,9 +258,7 @@
                         levelDisplay.textContent = userData.level || 'N/A';
                         courseDisplay.textContent = userData.course || 'N/A';
                         lodgeDisplay.textContent = userData.lodge || 'N/A';
-                        if (userData.profilePic) {
-                            profilePic.src = userData.profilePic;
-                        }
+                       //profilePic.src = "https://github.com/Kelvins-Programmer/Homovaty-Profile-Pics/blob/main/default-user.png?raw=true"; //Set default profile pic.
                         if (profileIdToLoad !== loggedInUserId && userData.username) {
                             chatUsernameDisplay.textContent = userData.username;
                         }
@@ -303,7 +282,9 @@
                 });
 
                 if (user.photoURL) {
-                    profilePic.src = user.photoURL;
+                   // profilePic.src = user.photoURL;  // No longer use user's photo URL
+                } else{
+                     profilePic.src = "https://github.com/Kelvins-Programmer/Homovaty-Profile-Pics/blob/main/default-user.png?raw=true";
                 }
             } else {
                 window.location.href = 'login.html';
@@ -352,50 +333,8 @@
                 });
         });
 
-        const profilePicContainer = document.querySelector('.profile-picture-container');
-        profilePicUpload.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                uploadProfilePicture(file);
-            }
-        });
 
-        async function uploadProfilePicture(file) {
-            uploadProgress.classList.remove('hidden');
-            const storageRef = storage.ref('profile-pictures/' + loggedInUserId + '/' + file.name);
-            const uploadTask = storageRef.put(file);
-
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
-                    uploadProgress.textContent = `Uploading: ${progress.toFixed(0)}%`;
-                },
-                (error) => {
-                    console.error('Error uploading image:', error);
-                    alert('Error uploading profile picture. Please try again.');
-                    uploadProgress.classList.add('hidden');
-                },
-                () => {
-                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        console.log('File available at', downloadURL);
-                        database.ref('users/' + loggedInUserId).update({
-                            profilePic: downloadURL
-                        }).then(() => {
-                            profilePic.src = downloadURL;
-                            uploadProgress.classList.add('hidden');
-                            alert('Profile picture updated!');
-                        }).catch((error) => {
-                            console.error('Error updating database with image URL:', error);
-                            alert('Error updating profile. Please try again.');
-                            uploadProgress.classList.add('hidden');
-                        });
-                    });
-                }
-            );
-        }
-
-       chatButton.addEventListener('click', () => {
+        chatButton.addEventListener('click', () => {
             const chatWithUsername = chatUsernameDisplay.textContent;
             window.location.href = `chat.html?username=${chatWithUsername}`;
             // You'll need to create the 'chat.html' page and its functionality
