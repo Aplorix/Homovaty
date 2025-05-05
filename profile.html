@@ -120,7 +120,7 @@
     <div class="profile-container">
         <h2>Your Profile</h2>
         <div class="profile-picture-container">
-            <img id="profile-pic" src="images/default-user.png" alt="Profile Picture">
+            <img id="profile-pic" src="Pictures-video of lodges/profilepic.png" alt="Profile Picture">
         </div>
         <div class="profile-info">
             <p><strong>Name:</strong> <span id="name">Loading...</span></p>
@@ -191,11 +191,9 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
-        const auth = firebase.auth();
-        const database = firebase.database();
+        const auth = firebase.auth();        const database = firebase.database();
         const storage = firebase.storage();
 
-        const profilePic = document.getElementById('profile-pic');
         const nameDisplay = document.getElementById('name');
         const usernameDisplay = document.getElementById('username');
         const emailDisplay = document.getElementById('email');
@@ -219,16 +217,14 @@
         const chatUsernameDisplay = document.getElementById('chat-username');
         const logoutButton = document.getElementById('logout-btn');
 
-        let loggedInUserId;
-        let currentUser;
-
         function getProfileIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('uid');
         }
 
         const viewedProfileId = getProfileIdFromUrl();
-
+        let loggedInUserId;
+        let currentUser;
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -240,6 +236,7 @@
                     profileIdToLoad = viewedProfileId;
                     editButton.classList.add('hidden');
                     chatButton.classList.remove('hidden');
+                    // The profile picture should not be clickable.
                     const profilePicContainer = document.querySelector('.profile-picture-container');
                     if (profilePicContainer) {
                         profilePicContainer.style.cursor = 'default';
@@ -249,10 +246,12 @@
                     chatButton.classList.add('hidden');
                     const profilePicContainer = document.querySelector('.profile-picture-container');
                     if (profilePicContainer) {
-                         profilePicContainer.style.cursor = 'pointer';
+                        profilePicContainer.style.cursor = 'pointer'; // Or leave it as is
                     }
                 }
+
                 loadUserProfile(profileIdToLoad);
+
             } else {
                 window.location.href = 'login.html';
             }
@@ -262,12 +261,26 @@
             database.ref('users/' + profileId).once('value', snapshot => {
                 const userData = snapshot.val();
                 if (userData) {
-                    updateProfileDisplay(userData);
+                    nameDisplay.textContent = userData.name || 'N/A';
+                    usernameDisplay.textContent = userData.username || 'N/A';
+                    emailDisplay.textContent = userData.email || currentUser.email || 'N/A';
+                    departmentDisplay.textContent = userData.department || 'N/A';
+                    levelDisplay.textContent = userData.level || 'N/A';
+                    courseDisplay.textContent = userData.course || 'N/A';
+                    lodgeDisplay.textContent = userData.lodge || 'N/A';
+
+                    if (profileId !== loggedInUserId && userData.username) {
+                        chatUsernameDisplay.textContent = userData.username;
+                    }
                     if (profileId === loggedInUserId) {
-                        populateEditFields(userData);
+                        editNameInput.value = userData.name || '';
+                        editUsernameInput.value = userData.username || '';
+                        editDepartmentInput.value = userData.department || '';
+                        editLevelSelect.value = userData.level || '';
+                        editCourseInput.value = userData.course || '';
+                        editLodgeInput.value = userData.lodge || '';
                     }
                 } else {
-                    // Handle the case where the user's data doesn't exist.
                     nameDisplay.textContent = 'N/A';
                     usernameDisplay.textContent = 'N/A';
                     emailDisplay.textContent = currentUser.email || 'N/A';
@@ -275,41 +288,10 @@
                     levelDisplay.textContent = 'N/A';
                     courseDisplay.textContent = 'N/A';
                     lodgeDisplay.textContent = 'N/A';
-                    profilePic.src = "images/default-user.png";
+                    profilePic.src = "Pictures-video of lodges/profilepic.png?raw=true";
                 }
             });
         }
-
-        function updateProfileDisplay(userData) {
-            nameDisplay.textContent = userData.name || 'N/A';
-            usernameDisplay.textContent = userData.username || 'N/A';
-            emailDisplay.textContent =  currentUser.email|| 'N/A';
-            departmentDisplay.textContent = userData.department || 'N/A';
-            levelDisplay.textContent = userData.level || 'N/A';
-            courseDisplay.textContent = userData.course || 'N/A';
-            lodgeDisplay.textContent = userData.lodge || 'N/A';
-
-            let profilePictureUrl = userData.profilePicture;
-            if (profilePictureUrl) {
-                profilePic.src = profilePictureUrl;
-            } else {
-                profilePic.src = "images/default-user.png";
-            }
-             if (viewedProfileId !== loggedInUserId && userData.username) {
-                chatUsernameDisplay.textContent = userData.username;
-            }
-        }
-
-        function populateEditFields(userData) {
-            editNameInput.value = userData.name || '';
-            editUsernameInput.value = userData.username || '';
-            editDepartmentInput.value = userData.department || '';
-            editLevelSelect.value = userData.level || '';
-            editCourseInput.value = userData.course || '';
-            editLodgeInput.value = userData.lodge || '';
-        }
-
-
 
         editButton.addEventListener('click', () => {
             document.querySelector('.profile-info').classList.add('hidden');
@@ -333,13 +315,14 @@
                 lodge: editLodgeInput.value.trim()
             };
 
+            // Update the database
             database.ref('users/' + loggedInUserId).update(updatedData)
                 .then(() => {
                     alert('Profile updated successfully!');
                     document.querySelector('.profile-info').classList.remove('hidden');
                     editProfileSection.classList.add('hidden');
                     editButton.classList.remove('hidden');
-                   loadUserProfile(loggedInUserId);
+                    loadUserProfile(loggedInUserId);
                 })
                 .catch((error) => {
                     console.error('Error updating profile:', error);
@@ -363,3 +346,4 @@
     </script>
 </body>
 </html>
+
