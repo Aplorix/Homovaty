@@ -13,13 +13,13 @@
         }
         header {
             display: flex;
+            justify-content: space-between; /* Push elements to the edges */
             align-items: center;
-            justify-content: space-between;
             background-color: #007BFF;
             color: white;
             padding: 5px 10px;
             height: 60px;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             overflow: hidden;
         }
         .logo {
@@ -82,9 +82,9 @@
             background-color: rgba(255, 255, 255, 0.5);
         }
         #notifications-icon {
-             position: relative;
+            position: relative;
         }
-       .notification-badge {
+        .notification-badge {
             position: absolute;
             top: -2px;
             right: -2px;
@@ -98,7 +98,6 @@
             min-width: 10px;
             text-align: center;
         }
-
         .profile-picture-container {
             width: 40px;
             height: 40px;
@@ -195,21 +194,58 @@
                 width: 80%;
                 margin: 10px 0;
             }
-             header {
+            header {
                 flex-wrap: wrap;
-                justify-content: center;
+                justify-content: space-between; /* Keep space-between */
+                align-items: center;
                 gap: 10px;
             }
             .logo {
                 margin-bottom: 10px;
+                width: auto; /* Adjust width to auto */
+                justify-content: flex-start; /* Align logo to the start (left) */
             }
             .auth-area {
-                flex-direction: column;
+                flex-direction: column; /* Stack auth elements vertically */
                 align-items: center;
                 gap: 10px;
             }
             .auth-buttons {
                 margin-right: 0;
+                width: 100%;
+                justify-content: center; /* Center buttons */
+            }
+            .icon-button-container{
+                width: 100%;
+                justify-content: center; /* Center icons */
+            }
+        }
+        /* Media query for larger screens */
+        @media (min-width: 601px) {
+            header {
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .logo {
+                margin-bottom: 0;
+                width: auto;
+                text-align: left;
+                justify-content: flex-start; /* Ensure logo is on the left */
+            }
+            .auth-area {
+                flex-direction: row;
+                align-items: center;
+            }
+            .auth-buttons {
+                margin-right: 10px;
+                width: auto;
+                justify-content: flex-start;
+            }
+            .icon-button-container {
+                margin-left: 10px;
+                width: auto;
+                justify-content: flex-start;
             }
         }
     </style>
@@ -263,7 +299,6 @@
                 </div>
             </a>
         </div>
-
         <div class="lodge">
             <a href="love.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/love.jpg" alt="Love Crib Lodge">
@@ -273,7 +308,6 @@
             </div>
             </a>
         </div>
-
         <div class="lodge">
             <a href="#" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Salvation Lodge.jpg" alt="Salvation Lodge">
@@ -283,7 +317,6 @@
             </div>
             </a>
         </div>
-
         <div class="lodge">
             <a href="#" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Amazing Grace Lodge.jpg" alt="Amazing Grace Lodge">
@@ -293,7 +326,6 @@
             </div>
             </a>
         </div>
-
         <div class="lodge">
             <a href="BN lodge.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/BN lodge.jpg" alt="BN Lodge">
@@ -303,7 +335,6 @@
             </div>
             </a>
         </div>
-
         <div class="lodge">
             <a href="grace.html" style="text-decoration: none;">
         <img src="Pictures-video of lodges/Grace Lodge.jpg" alt="Grace Lodge">
@@ -322,8 +353,7 @@
                 </div>
             </a>
         </div>
-
-            <div class="lodge">
+        <div class="lodge">
             <a href="muna.html" style="text-decoration: none;">
                 <img src="Pictures-video of lodges/MUNA LODGE.png" alt="Muna Lodge">
                 <div class="lodge-info">
@@ -332,8 +362,7 @@
                 </div>
             </a>
         </div>
-
-            <div class="lodge">
+        <div class="lodge">
             <a href="#" style="text-decoration: none;">
                 <img src="Pictures-video of lodges/ECOWAS.jpg" alt="EcoWas Lodge">
                 <div class="lodge-info">
@@ -359,14 +388,14 @@
     <script>
         // Your Firebase configuration object
         const firebaseConfig = {
-      apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
-      authDomain: "roommateapp-3eb62.firebaseapp.com",
-      projectId: "roommateapp-3eb62",
-      storageBucket: "roommateapp-3eb62.appspot.com",
-      messagingSenderId: "139896243034",
-      appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
-      databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
-    };
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID",
+        databaseURL: "YOUR_DATABASE_URL"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -409,11 +438,9 @@
                     }
                 });
 
-                if (user.photoURL) {
-                    profilePic.src = user.photoURL;
-                } else {
-                    profilePic.src = DEFAULT_PROFILE_PIC;
-                }
+                // Set the profile picture.
+                profilePic.src = DEFAULT_PROFILE_PIC;
+
 
                 profileContainer.addEventListener('click', () => {
                     window.location.href = 'profile.html';
