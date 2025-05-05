@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Homovaty</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+
+        #user-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        #user-list li {
+            background-color: #e9ecef;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ddd;
+        }
+
+        #user-list li:hover {
+            background-color: #d1ecf1;
+        }
+
+        #user-list li button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #user-list li button:hover {
+            background-color: #0056b3;
+        }
+
+        #user-list li.current-user {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            font-weight: bold;
+        }
+        #user-list li.current-user button{
+            display: none;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Users</h1>
+        <ul id="user-list">
+            </ul>
+        <p id="error-message" class="error-message"></p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            databaseURL: "YOUR_DATABASE_URL"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        const userList = document.getElementById('user-list');
+        const errorMessage = document.getElementById('error-message');
+        let currentUser;
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                loadUsers();
+            } else {
+                // Redirect to login if not logged in
+                window.location.href = 'login.html';
+            }
+        });
+
+        function loadUsers() {
+            database.ref('users').once('value', snapshot => {
+                if (snapshot.exists()) {
+                    userList.innerHTML = ''; // Clear the list
+                    snapshot.forEach(childSnapshot => {
+                        const user = childSnapshot.val();
+                        if (user.uid !== currentUser.uid) { // Exclude the current user
+                            const li = document.createElement('li');
+                            li.textContent = user.username;
+
+                            const chatButton = document.createElement('button');
+                            chatButton.textContent = 'Chat';
+                            chatButton.addEventListener('click', () => {
+                                // Redirect to chat page, passing the recipient's username
+                                window.location.href = `chat.html?username=${user.username}`;
+                            });
+                            li.appendChild(chatButton);
+                            userList.appendChild(li);
+                        } else {
+                            const li = document.createElement('li');
+                            li.textContent = user.username;
+                            li.classList.add('current-user');
+                            userList.appendChild(li);
+                        }
+                    });
+                } else {
+                    errorMessage.textContent = 'No users found.';
+                }
+            }, error => {
+                errorMessage.textContent = 'Error loading users: ' + error.message;
+            });
+        }
+    </script>
+</body>
+</html>
