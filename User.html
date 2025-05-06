@@ -38,7 +38,7 @@
             margin-bottom: 10px;
             border-radius: 5px;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Space between username and button */
             align-items: center;
             border: 1px solid #ddd;
         }
@@ -66,7 +66,8 @@
             border-color: #ffeeba;
             font-weight: bold;
         }
-        #user-list li.current-user button{
+
+        #user-list li.current-user button {
             display: none;
         }
 
@@ -75,13 +76,21 @@
             text-align: center;
             margin-top: 20px;
         }
+        .user-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .user-link:hover{
+            text-decoration: underline;
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Users</h1>
         <ul id="user-list">
-            </ul>
+        </ul>
         <p id="error-message" class="error-message"></p>
     </div>
 
@@ -91,14 +100,14 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-      apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
-      authDomain: "roommateapp-3eb62.firebaseapp.com",
-      projectId: "roommateapp-3eb62",
-      storageBucket: "roommateapp-3eb62.appspot.com",
-      messagingSenderId: "139896243034",
-      appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
-      databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
-    };
+            apiKey: "YOUR_API_KEY",
+            authDomain: "roommateapp-3eb62.firebaseapp.com",
+            projectId: "roommateapp-3eb62",
+            storageBucket: "roommateapp-3eb62.appspot.com",
+            messagingSenderId: "139896243034",
+            appId: "1:YOUR_APP_ID:web:YOUR_WEB_APP_ID",
+            databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -127,7 +136,11 @@
                         const user = childSnapshot.val();
                         if (user.uid !== currentUser.uid) { // Exclude the current user
                             const li = document.createElement('li');
-                            li.textContent = user.username;
+                            const userLink = document.createElement('a');  //create user link
+                            userLink.textContent = user.username;
+                            userLink.href = `profile.html?uid=${childSnapshot.key}`; // link to user profile
+                            userLink.className = 'user-link'; //add a class
+                            li.appendChild(userLink);
 
                             const chatButton = document.createElement('button');
                             chatButton.textContent = 'Chat';
