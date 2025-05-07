@@ -135,117 +135,98 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script>
-       // Firebase configuration
-        const firebaseConfig = {
-      apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
-      authDomain: "roommateapp-3eb62.firebaseapp.com",
-      projectId: "roommateapp-3eb62",
-      storageBucket: "roommateapp-3eb62.appspot.com",
-      messagingSenderId: "139896243034",
-      appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
-      databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
-    };
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
+        authDomain: "roommateapp-3eb62.firebaseapp.com",
+        projectId: "roommateapp-3eb62",
+        storageBucket: "roommateapp-3eb62.appspot.com",
+        messagingSenderId: "139896243034",
+        appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
+        databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
+    };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
 
-        // Get DOM elements
-        const chatHeader = document.getElementById('chat-header');
-        const recipientUsernameDisplay = document.getElementById('recipient-username');
-        const messageList = document.getElementById('message-list');
-        const messageForm = document.getElementById('message-form');
-        const messageInput = document.getElementById('message-input');
-        const errorMessage = document.getElementById('error-message');
-        const backButton = document.querySelector('.back-button');
+    const chatHeader = document.getElementById('chat-header');
+    const recipientUsernameDisplay = document.getElementById('recipient-username');
+    const messageList = document.getElementById('message-list');
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('message-input');
+    const errorMessage = document.getElementById('error-message');
 
+    let currentUser;
+    let recipientUid;
+    let recipientUsername;
 
-        let currentUser;
-        let recipientUsername;
+    const urlParams = new URLSearchParams(window.location.search);
+    recipientUid = urlParams.get('uid');  // Get recipient's UID from URL
+    recipientUsername = urlParams.get('username');  // Optional display name
 
-        // Get recipient username from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        recipientUsername = urlParams.get('username');
+    if (!recipientUid || !recipientUsername) {
+        errorMessage.textContent = 'Recipient information is missing.';
+        messageForm.style.display = 'none';
+    } else {
+        recipientUsernameDisplay.textContent = recipientUsername;
+    }
 
-        if (!recipientUsername) {
-            errorMessage.textContent = 'Recipient username is missing from the URL.';
-            // Disable the form and prevent sending messages
-            messageForm.style.display = 'none';
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            currentUser = user;
+            loadMessages();
         } else {
-            recipientUsernameDisplay.textContent = recipientUsername;
+            window.location.href = 'login.html';
         }
+    });
 
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                loadMessages();
-            } else {
-                // Redirect to login if not logged in
-                window.location.href = 'login.html';
-            }
-        });
+    function loadMessages() {
+        if (!currentUser || !recipientUid) return;
 
-        function loadMessages() {
-           if (!currentUser) return;
-            const chatKey = getChatKey(currentUser.uid, recipientUsername);
-            const messagesRef = database.ref(`messages/${chatKey}`).orderByChild('timestamp');
-
-            messagesRef.on('value', snapshot => {
-                messageList.innerHTML = ''; // Clear the list
-                if (snapshot.exists()) {
-                    snapshot.forEach(childSnapshot => {
-                        const message = childSnapshot.val();
-                        const li = document.createElement('li');
-                        li.innerHTML = `<strong>${message.sender}:</strong> ${message.text}`;
-                        messageList.appendChild(li);
-                    });
-                    // Scroll to the bottom of the message list whenever new messages are loaded
-                    messageList.scrollTop = messageList.scrollHeight;
-                } else {
-                    messageList.innerHTML = '<li>No messages yet. Be the first to start the conversation!</li>';
-                }
-            }, error => {
-                errorMessage.textContent = 'Error loading messages: ' + error.message;
-            });
-        }
-
-        messageForm.addEventListener('submit', event => {
-            event.preventDefault();
-            const text = messageInput.value.trim();
-
-            if (text === '') return;
-
-            sendMessage(text);
-        });
-
-       function sendMessage(text) {
-            if (!currentUser) return;
-
-            const chatKey = getChatKey(currentUser.uid, recipientUsername);
-            const senderUsername = currentUser.email.split('@')[0]; // Get username from email
-            const messageRef = database.ref(`messages/${chatKey}`).push();
-
-            const message = {
-                sender: senderUsername,
-                text: text,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-
-            messageRef.set(message)
-                .then(() => {
-                    messageInput.value = ''; // Clear the input
-                })
-                .catch(error => {
-                    errorMessage.textContent = 'Error sending message: ' + error.message;
+        const messagesRef = database.ref(`messages/${currentUser.uid}/${recipientUid}`).orderByChild('timestamp');
+        messagesRef.on('value', snapshot => {
+            messageList.innerHTML = '';
+            if (snapshot.exists()) {
+                snapshot.forEach(childSnapshot => {
+                    const message = childSnapshot.val();
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${message.sender}:</strong> ${message.text}`;
+                    messageList.appendChild(li);
                 });
-        }
+                messageList.scrollTop = messageList.scrollHeight;
+            } else {
+                messageList.innerHTML = '<li>No messages yet. Be the first to start the conversation!</li>';
+            }
+        }, error => {
+            errorMessage.textContent = 'Error loading messages: ' + error.message;
+        });
+    }
 
-        // Function to generate a unique chat key based on user IDs.
-        function getChatKey(userUid1, userUid2) {
-            const sortedUids = [userUid1, userUid2].sort();
-            return `${sortedUids[0]}_${sortedUids[1]}`;
-        }
-    </script>
+    messageForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const text = messageInput.value.trim();
+        if (text === '') return;
+        sendMessage(text);
+    });
+
+    function sendMessage(text) {
+        if (!currentUser || !recipientUid) return;
+
+        const senderUsername = currentUser.email.split('@')[0];
+        const message = {
+            sender: senderUsername,
+            text: text,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        const messageRef1 = database.ref(`messages/${currentUser.uid}/${recipientUid}`).push();
+        const messageRef2 = database.ref(`messages/${recipientUid}/${currentUser.uid}`).push();
+
+        messageRef1.set(message);
+        messageRef2.set(message);
+        messageInput.value = '';
+    }
+</script>
 </body>
 </html>
