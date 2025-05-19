@@ -3,262 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat - Homovaty</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Chat - Homovate</title>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            background-color: #f2f2f2;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: white;
+        .chat-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #fff;
+            border-radius: 8px;
             padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        #chat-header {
+        h2 {
             text-align: center;
             color: #007BFF;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
         }
 
-        #message-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-            flex-grow: 1;
+        .messages {
+            max-height: 400px;
             overflow-y: auto;
-            max-height: 400px; /* Limit the height of the message list */
-        }
-
-        #message-list li {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #e9ecef;
             border: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            word-wrap: break-word;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
         }
 
-        #message-list li:nth-child(odd) {
-            background-color: #f8f9fa;
+        .message {
+            margin-bottom: 10px;
         }
 
-        #message-list li strong {
-            margin-bottom: 5px;
+        .message.you {
+            text-align: right;
             color: #007BFF;
         }
 
-        #message-form {
+        .message.them {
+            text-align: left;
+            color: #333;
+        }
+
+        .input-group {
             display: flex;
-            margin-top: 10px;
+            gap: 10px;
         }
 
-        #message-input {
-            flex-grow: 1;
+        input[type="text"] {
+            flex: 1;
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px 0 0 8px;
-            outline: none;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
 
-        #message-input:focus {
-            border-color: #007BFF;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-        }
-
-        #send-button {
+        button {
+            padding: 10px 15px;
+            border: none;
             background-color: #007BFF;
             color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 0 8px 8px 0;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
-        #send-button:hover {
+        button:hover {
             background-color: #0056b3;
         }
 
-        #error-message {
+        .error-message {
+            text-align: center;
             color: red;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .back-button {
-            display: block;
-            margin-top: 30px;
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 16px;
-            transition: color 0.3s ease;
-            text-align: center;
-        }
-        .back-button:hover {
-            color: #0056b3;
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 id="chat-header">Chat with <span id="recipient-username"></span></h1>
-        <ul id="message-list">
-            <li>Loading messages...</li>
-        </ul>
-        <form id="message-form">
-            <input type="text" id="message-input" placeholder="Type your message...">
-            <button type="submit" id="send-button">Send</button>
-        </form>
+    <div class="chat-container">
+        <h2 id="chat-title">Chat</h2>
+        <div id="messages" class="messages"></div>
+        <div class="input-group">
+            <input type="text" id="message-input" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
         <p id="error-message" class="error-message"></p>
-        <a href="user.html" class="back-button ">Back to Users</a>
     </div>
 
+    <!-- Firebase scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script>
-        // Firebase configuration
-        const firebaseConfig = {
-      apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
-      authDomain: "roommateapp-3eb62.firebaseapp.com",
-      projectId: "roommateapp-3eb62",
-      storageBucket: "roommateapp-3eb62.appspot.com",
-      messagingSenderId: "139896243034",
-      appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
-      databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
-    };
 
-        // Initialize Firebase
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
+            authDomain: "roommateapp-3eb62.firebaseapp.com",
+            projectId: "roommateapp-3eb62",
+            storageBucket: "roommateapp-3eb62.appspot.com",
+            messagingSenderId: "139896243034",
+            appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
+            databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
+        };
+
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const database = firebase.database();
 
-        // Get DOM elements
-        const chatHeader = document.getElementById('chat-header');
-        const recipientUsernameDisplay = document.getElementById('recipient-username');
-        const messageList = document.getElementById('message-list');
-        const messageForm = document.getElementById('message-form');
-        const messageInput = document.getElementById('message-input');
-        const errorMessage = document.getElementById('error-message');
-        const backButton = document.querySelector('.back-button');
+        const messagesDiv = document.getElementById("messages");
+        const messageInput = document.getElementById("message-input");
+        const errorMessage = document.getElementById("error-message");
+        const chatTitle = document.getElementById("chat-title");
 
-        let currentUserUid;
-        let recipientUid;
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipientUid = urlParams.get('recipientUid');
+
         let currentUser;
 
         auth.onAuthStateChanged(user => {
             if (user) {
                 currentUser = user;
-                currentUserUid = user.uid;
-                loadMessages();
+                loadRecipientUsername();
+                listenForMessages();
             } else {
-                // Redirect to login if not logged in
-                window.location.href = 'login.html';
+                window.location.href = "login.html";
             }
         });
 
-        // Get recipient UID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        recipientUid = urlParams.get('recipientUid');
-
-        if (!recipientUid) {
-            errorMessage.textContent = 'Recipient UID is missing from the URL.';
-            messageForm.style.display = 'none'; // Disable form
-        }
-
-        function loadMessages() {
-            if (!currentUserUid || !recipientUid) return;
-
-            const chatKey = getChatKey(currentUserUid, recipientUid);
-            const messagesRef = database.ref(`chats/${chatKey}/messages`).orderByChild('timestamp');
-
-            messagesRef.on('value', snapshot => {
-                messageList.innerHTML = '';
+        function loadRecipientUsername() {
+            database.ref('users/' + recipientUid).once('value', snapshot => {
                 if (snapshot.exists()) {
-                    snapshot.forEach(childSnapshot => {
-                        const message = childSnapshot.val();
-                        const li = document.createElement('li');
-                        li.innerHTML = `<strong>${message.senderUsername}:</strong> ${message.text}`;  // Display sender's username
-                        messageList.appendChild(li);
-                    });
-                    messageList.scrollTop = messageList.scrollHeight;
+                    const username = snapshot.val().username;
+                    chatTitle.textContent = `Chat with ${username}`;
                 } else {
-                    messageList.innerHTML = '<li>No messages yet. Be the first to start the conversation!</li>';
+                    chatTitle.textContent = "Chat";
                 }
-            }, error => {
-                errorMessage.textContent = 'Error loading messages: ' + error.message;
             });
         }
 
-        messageForm.addEventListener('submit', event => {
-            event.preventDefault();
-            const text = messageInput.value.trim();
-            if (text === '') return;
-            sendMessage(text);
-        });
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            if (!messageText) return;
 
-        function sendMessage(text) {
-            if (!currentUserUid || !recipientUid) return;
-
-            const chatKey = getChatKey(currentUserUid, recipientUid);
-            const messageRef = database.ref(`chats/${chatKey}/messages`).push();
-            const senderUsername = currentUser.email.split('@')[0];
-
-            const message = {
-                senderUid: currentUserUid,
-                senderUsername: senderUsername, // Store username
-                text: text,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
+            const timestamp = Date.now();
+            const messageData = {
+                sender: currentUser.uid,
+                recipient: recipientUid,
+                text: messageText,
+                timestamp: timestamp
             };
 
-            messageRef.set(message)
-                .then(() => {
-                    messageInput.value = '';
-                })
-                .catch(error => {
-                    errorMessage.textContent = 'Error sending message: ' + error.message;
-                });
+            const messageKey = `${currentUser.uid}_${recipientUid}`;
+
+            // Store under a unique key for both sender and receiver
+            database.ref('messages').push(messageData);
+
+            messageInput.value = '';
         }
 
-        function getChatKey(userUid1, userUid2) {
-            const sortedUids = [userUid1, userUid2].sort();
-            return `${sortedUids[0]}_${sortedUids[1]}`;
-        }
+        function listenForMessages() {
+            database.ref('messages').on('child_added', snapshot => {
+                const msg = snapshot.val();
+                const isBetweenUsers =
+                    (msg.sender === currentUser.uid && msg.recipient === recipientUid) ||
+                    (msg.sender === recipientUid && msg.recipient === currentUser.uid);
 
-        //Set the header
-        if(recipientUid){
-            database.ref('users/' + recipientUid).once('value', snapshot => {
-                if(snapshot.exists()){
-                    const recipientData = snapshot.val();
-                    recipientUsernameDisplay.textContent = recipientData.username;
+                if (isBetweenUsers) {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.classList.add('message');
+                    msgDiv.classList.add(msg.sender === currentUser.uid ? 'you' : 'them');
+                    msgDiv.textContent = msg.text;
+                    messagesDiv.appendChild(msgDiv);
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
                 }
-                else{
-                    recipientUsernameDisplay.textContent = "Unknown User";
-                }
-            })
-        }
-        else{
-             recipientUsernameDisplay.textContent = "Unknown User";
+            });
         }
     </script>
 </body>
 </html>
-
