@@ -1,12 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat - Homovate</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* (Styling remains unchanged) */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    #chat-header {
+      text-align: center;
+      color: #007BFF;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    #message-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px 0;
+      flex-grow: 1;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    #message-list li {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #e9ecef;
+      border: 1px solid #ddd;
+      word-wrap: break-word;
+    }
+    #message-list li:nth-child(odd) {
+      background-color: #f8f9fa;
+    }
+    #message-list li strong {
+      margin-bottom: 5px;
+      color: #007BFF;
+    }
+    #message-form {
+      display: flex;
+      margin-top: 10px;
+    }
+    #message-input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px 0 0 8px;
+      outline: none;
+    }
+    #message-input:focus {
+      border-color: #007BFF;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+    #send-button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #send-button:hover {
+      background-color: #0056b3;
+    }
+    #error-message {
+      color: red;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-button {
+      display: block;
+      margin-top: 30px;
+      color: #007BFF;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s ease;
+      text-align: center;
+    }
+    .back-button:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -16,7 +110,7 @@
       <li>Loading messages...</li>
     </ul>
     <form id="message-form">
-      <input type="text" id="message-input" placeholder="Type your message..." />
+      <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
       <button type="submit" id="send-button">Send</button>
     </form>
     <p id="error-message" class="error-message"></p>
@@ -26,6 +120,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
@@ -41,28 +136,23 @@
     const auth = firebase.auth();
     const database = firebase.database();
 
-    const chatHeader = document.getElementById('chat-header');
     const recipientUsernameDisplay = document.getElementById('recipient-username');
     const messageList = document.getElementById('message-list');
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
     const errorMessage = document.getElementById('error-message');
 
-    let currentUser;
-    let recipientUid;
-    let recipientUsername;
-
-    // Get recipient UID and username from URL
     const urlParams = new URLSearchParams(window.location.search);
-    recipientUid = urlParams.get('uid');
-    recipientUsername = urlParams.get('username');
+    const recipientUsername = urlParams.get('username');
 
-    if (!recipientUid || !recipientUsername) {
-      errorMessage.textContent = 'Recipient info missing from URL.';
+    if (!recipientUsername) {
+      errorMessage.textContent = 'Recipient username is missing from the URL.';
       messageForm.style.display = 'none';
     } else {
       recipientUsernameDisplay.textContent = recipientUsername;
     }
+
+    let currentUser;
 
     auth.onAuthStateChanged(user => {
       if (user) {
@@ -74,17 +164,18 @@
     });
 
     function loadMessages() {
-      if (!currentUser || !recipientUid) return;
+      if (!currentUser) return;
 
-      const messagesRef = database.ref(`messages/${currentUser.uid}/${recipientUid}`).orderByChild('timestamp');
+      const chatKey = getChatKey(currentUser.uid, recipientUsername);
+      const messagesRef = database.ref(`messages/${chatKey}`).orderByChild('timestamp');
 
       messagesRef.on('value', snapshot => {
         messageList.innerHTML = '';
         if (snapshot.exists()) {
-          snapshot.forEach(childSnapshot => {
-            const message = childSnapshot.val();
+          snapshot.forEach(child => {
+            const msg = child.val();
             const li = document.createElement('li');
-            li.innerHTML = `<strong>${message.sender}:</strong> ${message.text}`;
+            li.innerHTML = `<strong>${msg.sender}:</strong> ${msg.text}`;
             messageList.appendChild(li);
           });
           messageList.scrollTop = messageList.scrollHeight;
@@ -104,23 +195,30 @@
     });
 
     function sendMessage(text) {
-      if (!currentUser || !recipientUid) return;
+      if (!currentUser) return;
 
+      const chatKey = getChatKey(currentUser.uid, recipientUsername);
       const senderUsername = currentUser.email.split('@')[0];
+      const messageRef = database.ref(`messages/${chatKey}`).push();
+
       const message = {
         sender: senderUsername,
         text: text,
         timestamp: firebase.database.ServerValue.TIMESTAMP
       };
 
-      const senderRef = database.ref(`messages/${currentUser.uid}/${recipientUid}`).push();
-      const recipientRef = database.ref(`messages/${recipientUid}/${currentUser.uid}`).push();
+      messageRef.set(message)
+        .then(() => {
+          messageInput.value = '';
+        })
+        .catch(error => {
+          errorMessage.textContent = 'Error sending message: ' + error.message;
+        });
+    }
 
-      // Save for both sender and recipient
-      senderRef.set(message);
-      recipientRef.set(message);
-
-      messageInput.value = '';
+    function getChatKey(uid1, uid2) {
+      const sorted = [uid1, uid2].sort();
+      return `${sorted[0]}_${sorted[1]}`;
     }
   </script>
 </body>
