@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users - Homovaty</title>
+    <title>Users - Homovate</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,7 +38,7 @@
             margin-bottom: 10px;
             border-radius: 5px;
             display: flex;
-            justify-content: space-between; /* Space between username and button */
+            justify-content: space-between;
             align-items: center;
             border: 1px solid #ddd;
         }
@@ -65,6 +65,8 @@
             background-color: #fff3cd;
             border-color: #ffeeba;
             font-weight: bold;
+            display: flex; /* Use flexbox for layout */
+            justify-content: center; /* Center content horizontally */
         }
 
         #user-list li.current-user button {
@@ -80,7 +82,8 @@
             color: #007bff;
             text-decoration: none;
         }
-        .user-link:hover{
+
+        .user-link:hover {
             text-decoration: underline;
             color: #0056b3;
         }
@@ -93,7 +96,6 @@
         </ul>
         <p id="error-message" class="error-message"></p>
     </div>
-
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -131,28 +133,28 @@
         function loadUsers() {
             database.ref('users').once('value', snapshot => {
                 if (snapshot.exists()) {
-                    userList.innerHTML = ''; // Clear the list
+                    userList.innerHTML = '';
                     snapshot.forEach(childSnapshot => {
+                        const userUid = childSnapshot.key;
                         const user = childSnapshot.val();
-                        if (user.uid !== currentUser.uid) { // Exclude the current user
+                        if (userUid !== currentUser.uid) {
                             const li = document.createElement('li');
-                            const userLink = document.createElement('a');  //create user link
+                            const userLink = document.createElement('a');
                             userLink.textContent = user.username;
-                            userLink.href = `profile.html?uid=${childSnapshot.key}`; // link to user profile
-                            userLink.className = 'user-link'; //add a class
+                            userLink.href = `profile.html?uid=${userUid}`;
+                            userLink.className = 'user-link';
                             li.appendChild(userLink);
 
                             const chatButton = document.createElement('button');
                             chatButton.textContent = 'Chat';
                             chatButton.addEventListener('click', () => {
-                                // Redirect to chat page, passing the recipient's username
-                                window.location.href = `chat.html?username=${user.username}`;
+                                window.location.href = `chat.html?recipientUid=${userUid}`;
                             });
                             li.appendChild(chatButton);
                             userList.appendChild(li);
                         } else {
                             const li = document.createElement('li');
-                            li.textContent = user.username;
+                            li.textContent = `My Profile: ${user.username}`;
                             li.classList.add('current-user');
                             userList.appendChild(li);
                         }
@@ -167,3 +169,4 @@
     </script>
 </body>
 </html>
+
