@@ -128,14 +128,14 @@
             <button type="submit" id="send-button">Send</button>
         </form>
         <p id="error-message" class="error-message"></p>
-        <a href="users.html" class="back-button ">Back to Users</a>
+        <a href="user.html" class="back-button ">Back to Users</a>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script>
-       // Firebase configuration
+        // Firebase configuration
         const firebaseConfig = {
       apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
       authDomain: "roommateapp-3eb62.firebaseapp.com",
@@ -160,25 +160,14 @@
         const errorMessage = document.getElementById('error-message');
         const backButton = document.querySelector('.back-button');
 
-
+        let currentUserUid;
+        let recipientUid;
         let currentUser;
-        let recipientUsername;
-
-        // Get recipient username from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        recipientUsername = urlParams.get('username');
-
-        if (!recipientUsername) {
-            errorMessage.textContent = 'Recipient username is missing from the URL.';
-            // Disable the form and prevent sending messages
-            messageForm.style.display = 'none';
-        } else {
-            recipientUsernameDisplay.textContent = recipientUsername;
-        }
 
         auth.onAuthStateChanged(user => {
             if (user) {
                 currentUser = user;
+                currentUserUid = user.uid;
                 loadMessages();
             } else {
                 // Redirect to login if not logged in
@@ -186,21 +175,30 @@
             }
         });
 
+        // Get recipient UID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        recipientUid = urlParams.get('recipientUid');
+
+        if (!recipientUid) {
+            errorMessage.textContent = 'Recipient UID is missing from the URL.';
+            messageForm.style.display = 'none'; // Disable form
+        }
+
         function loadMessages() {
-           if (!currentUser) return;
-            const chatKey = getChatKey(currentUser.uid, recipientUsername);
-            const messagesRef = database.ref(`messages/${chatKey}`).orderByChild('timestamp');
+            if (!currentUserUid || !recipientUid) return;
+
+            const chatKey = getChatKey(currentUserUid, recipientUid);
+            const messagesRef = database.ref(`chats/${chatKey}/messages`).orderByChild('timestamp');
 
             messagesRef.on('value', snapshot => {
-                messageList.innerHTML = ''; // Clear the list
+                messageList.innerHTML = '';
                 if (snapshot.exists()) {
                     snapshot.forEach(childSnapshot => {
                         const message = childSnapshot.val();
                         const li = document.createElement('li');
-                        li.innerHTML = `<strong>${message.sender}:</strong> ${message.text}`;
+                        li.innerHTML = `<strong>${message.senderUsername}:</strong> ${message.text}`;  // Display sender's username
                         messageList.appendChild(li);
                     });
-                    // Scroll to the bottom of the message list whenever new messages are loaded
                     messageList.scrollTop = messageList.scrollHeight;
                 } else {
                     messageList.innerHTML = '<li>No messages yet. Be the first to start the conversation!</li>';
@@ -213,38 +211,52 @@
         messageForm.addEventListener('submit', event => {
             event.preventDefault();
             const text = messageInput.value.trim();
-
             if (text === '') return;
-
             sendMessage(text);
         });
 
-       function sendMessage(text) {
-            if (!currentUser) return;
+        function sendMessage(text) {
+            if (!currentUserUid || !recipientUid) return;
 
-            const chatKey = getChatKey(currentUser.uid, recipientUsername);
-            const senderUsername = currentUser.email.split('@')[0]; // Get username from email
-            const messageRef = database.ref(`messages/${chatKey}`).push();
+            const chatKey = getChatKey(currentUserUid, recipientUid);
+            const messageRef = database.ref(`chats/${chatKey}/messages`).push();
+            const senderUsername = currentUser.email.split('@')[0];
 
             const message = {
-                sender: senderUsername,
+                senderUid: currentUserUid,
+                senderUsername: senderUsername, // Store username
                 text: text,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
             messageRef.set(message)
                 .then(() => {
-                    messageInput.value = ''; // Clear the input
+                    messageInput.value = '';
                 })
                 .catch(error => {
                     errorMessage.textContent = 'Error sending message: ' + error.message;
                 });
         }
 
-        // Function to generate a unique chat key based on user IDs.
         function getChatKey(userUid1, userUid2) {
             const sortedUids = [userUid1, userUid2].sort();
             return `${sortedUids[0]}_${sortedUids[1]}`;
+        }
+
+        //Set the header
+        if(recipientUid){
+            database.ref('users/' + recipientUid).once('value', snapshot => {
+                if(snapshot.exists()){
+                    const recipientData = snapshot.val();
+                    recipientUsernameDisplay.textContent = recipientData.username;
+                }
+                else{
+                    recipientUsernameDisplay.textContent = "Unknown User";
+                }
+            })
+        }
+        else{
+             recipientUsernameDisplay.textContent = "Unknown User";
         }
     </script>
 </body>
