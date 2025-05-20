@@ -170,7 +170,6 @@
   <a href="index.html" class="back-button">Back to Home</a>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -179,14 +178,14 @@
 <script>
   // Firebase config
   const firebaseConfig = {
-    apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
-    authDomain: "roommateapp-3eb62.firebaseapp.com",
-    projectId: "roommateapp-3eb62",
-    storageBucket: "roommateapp-3eb62.appspot.com",
-    messagingSenderId: "139896243034",
-    appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
-    databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
-  };
+      apiKey: "AIzaSyD-F9rAEqtLyJabxVJM5H7rfufNAEcceSg",
+      authDomain: "roommateapp-3eb62.firebaseapp.com",
+      projectId: "roommateapp-3eb62",
+      storageBucket: "roommateapp-3eb62.appspot.com",
+      messagingSenderId: "139896243034",
+      appId: "1:139896243034:web:a2ba925bcb4c0c967f2963",
+      databaseURL: "https://roommateapp-3eb62-default-rtdb.firebaseio.com/"
+    };
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
@@ -367,8 +366,8 @@
   });
 
   chatButton.addEventListener('click', () => {
-    // Redirect to chat page with profileUid as chat partner
-    window.location.href = 'chat.html?chatWith=' + profileUid;
+    // Redirect to chat page with profileUid as recipientUid
+    window.location.href = 'chat.html?recipientUid=' + profileUid;
   });
 
   profilePicContainer.addEventListener('click', () => {
@@ -397,3 +396,5 @@
     loadProfileData(profileUid);
   });
 </script>
+</body>
+</html>
